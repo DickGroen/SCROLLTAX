@@ -13,7 +13,7 @@
 
     h1 {
       font-size: 58px;
-      margin-bottom: 30px;
+      margin-bottom: 10px;
     }
 
     p {
@@ -69,6 +69,11 @@
       margin-top: 10px;
     }
 
+    .fomo {
+      color: #fbbf24;
+      margin-top: 6px;
+    }
+
     .small {
       color: #64748b;
       font-size: 12px;
@@ -83,6 +88,7 @@
 </head>
 <body>
   <h1>ScrollTax</h1>
+  <p class="muted" style="font-size:20px; margin-top:0;">Every hour costs you.</p>
 
   <p>How many hours did you scroll today?</p>
 
@@ -96,9 +102,10 @@
     <p class="muted">You weren’t. You just lost time.</p>
 
     <p class="warning">Every day you wait = more time gone.</p>
+    <p class="fomo">Most people stay stuck in this loop for years.</p>
 
     <p style="margin-top:15px;">
-      Stop wasting hours every day — fix it in 7 days
+      Keep scrolling… or fix it in 7 days
     </p>
 
     <input id="email" type="email" placeholder="Enter your email" />
@@ -151,8 +158,11 @@
       }
 
       console.log('Email captured:', email);
-      alert('Check your inbox — your reset plan is coming.');
       success.style.display = 'block';
+
+      setTimeout(() => {
+        window.location.href = '/plan.html';
+      }, 700);
     }
   </script>
 </body>
