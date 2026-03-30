@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ScrollTax</title>
+</head>
+<body>
+  <h1>ScrollTax</h1>
+  <p>How many hours did you scroll today?</p>
+  <input id="hours" type="number" />
+  <button onclick="calculate()">Calculate</button>
+
+  <pre id="result"></pre>
+
+  <script>
+    async function calculate() {
+      const hours = document.getElementById('hours').value;
+
+      const res = await fetch('/api/scrolltax', {
+        method: 'POST',
+        body: JSON.stringify({ hours }),
+        headers: { 'Content-Type': 'application/json' }
+      });
+
+      const data = await res.text();
+      document.getElementById('result').innerText = data;
+    }
+  </script>
+</body>
+</html>
