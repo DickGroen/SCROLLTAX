@@ -76,5 +76,33 @@ function captureEmail() {
   document.getElementById('success').style.display = 'block';
 }
 </script>
+<script>
+async function calculate() {
+  const hours = document.getElementById('hours').value;
+
+  const res = await fetch('/api/scrolltax', {
+    method: 'POST',
+    body: JSON.stringify({ hours }),
+    headers: { 'Content-Type': 'application/json' }
+  });
+
+  const data = await res.text();
+  document.getElementById('result').innerText = data;
+
+  // CTA zichtbaar maken
+  document.getElementById('cta').style.display = 'block';
+}
+
+function captureEmail() {
+  const email = document.getElementById('email').value;
+
+  if (!email) return alert("Enter email");
+
+  console.log("Email captured:", email);
+
+  document.getElementById('success').style.display = 'block';
+}
+</script>
+  
 </body>
 </html>
