@@ -4,15 +4,32 @@
   <title>ScrollTax</title>
   <style>
     body {
-      font-family: Arial;
+      font-family: Arial, sans-serif;
       background: #0f172a;
       color: white;
       padding: 40px;
+      margin: 0;
+    }
+
+    h1 {
+      font-size: 58px;
+      margin-bottom: 30px;
+    }
+
+    p {
+      line-height: 1.5;
     }
 
     input, button {
       padding: 10px;
       margin-top: 10px;
+      font-size: 16px;
+    }
+
+    input {
+      width: 250px;
+      border: none;
+      border-radius: 2px;
     }
 
     button {
@@ -20,6 +37,11 @@
       border: none;
       cursor: pointer;
       color: white;
+      margin-left: 10px;
+    }
+
+    button:hover {
+      opacity: 0.95;
     }
 
     pre {
@@ -28,82 +50,110 @@
       padding: 20px;
       border-radius: 10px;
       white-space: pre-wrap;
+      line-height: 1.8;
+      font-size: 16px;
+      max-width: 1400px;
+    }
+
+    #cta {
+      margin-top: 30px;
+      display: none;
+    }
+
+    .muted {
+      color: #94a3b8;
+    }
+
+    .warning {
+      color: #f87171;
+      margin-top: 10px;
+    }
+
+    .small {
+      color: #64748b;
+      font-size: 12px;
+    }
+
+    #success {
+      color: #22c55e;
+      display: none;
+      margin-top: 12px;
     }
   </style>
 </head>
-
 <body>
   <h1>ScrollTax</h1>
+
   <p>How many hours did you scroll today?</p>
 
-  <input id="hours" type="number" />
+  <input id="hours" type="number" min="0" step="1" placeholder="Enter hours" />
   <button onclick="calculate()">Calculate</button>
 
   <pre id="result"></pre>
 
-  <!-- 🔥 CTA -->
-  <div id="cta" style="margin-top:30px; display:none;">
-    
+  <div id="cta">
     <p style="font-size:18px;"><strong>You thought you were relaxing.</strong></p>
-    <p style="color:#94a3b8;">You weren’t. You just lost time.</p>
+    <p class="muted">You weren’t. You just lost time.</p>
 
-    <p style="color:#f87171; margin-top:10px;">
-      Every day you wait = more time gone.
-    </p>
+    <p class="warning">Every day you wait = more time gone.</p>
 
     <p style="margin-top:15px;">
       Stop wasting hours every day — fix it in 7 days
     </p>
 
-    <input id="email" placeholder="Enter your email" style="width:250px;" />
-    <button onclick="captureEmail()" style="margin-left:10px;">
-      Fix my habit
-    </button>
+    <input id="email" type="email" placeholder="Enter your email" />
+    <button onclick="captureEmail()">Fix my habit</button>
 
-    <p style="color:#64748b; font-size:12px;">
-      No spam. Just a simple reset plan.
-    </p>
+    <p class="small">No spam. Just a simple reset plan.</p>
 
-    <p id="success" style="color:#22c55e; display:none;">
-      You're one step away from fixing this.
-    </p>
-
+    <p id="success">You're one step away from fixing this.</p>
   </div>
 
   <script>
     async function calculate() {
-     const hours = body.hours;
-const money = hours * 15;
+      const hoursInput = document.getElementById('hours');
+      const result = document.getElementById('result');
+      const cta = document.getElementById('cta');
 
-      const res = await fetch('/api/scrolltax', {
-        method: 'POST',
-        body: JSON.stringify({ hours }),
-        headers: { 'Content-Type': 'application/json' }
-      });
+      const hours = hoursInput.value.trim();
 
-      const data = await res.text();
-      document.getElementById('result').innerText = data;
-
-      // CTA tonen
-      document.getElementById('cta').style.display = 'block';
-    }
-
-    function captureEmail() {
-      const email = document.getElementById('email').value;
-
-      if (!email) {
-        alert("Enter your email");
+      if (!hours) {
+        alert('Enter your hours first');
         return;
       }
 
-      // 👉 tijdelijk (later vervangen door echte opslag)
-      console.log("Email:", email);
+      result.innerText = 'Loading...';
 
-      alert("Check your inbox — your reset plan is coming.");
+      try {
+        const res = await fetch('/api/scrolltax', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ hours: Number(hours) })
+        });
 
-      document.getElementById('success').style.display = 'block';
+        const text = await res.text();
+        result.innerText = text;
+        cta.style.display = 'block';
+      } catch (error) {
+        result.innerText = 'Something went wrong. Please try again.';
+        console.error(error);
+      }
+    }
+
+    function captureEmail() {
+      const emailInput = document.getElementById('email');
+      const success = document.getElementById('success');
+      const email = emailInput.value.trim();
+
+      if (!email) {
+        alert('Enter your email');
+        return;
+      }
+
+      console.log('Email captured:', email);
+      alert('Check your inbox — your reset plan is coming.');
+      success.style.display = 'block';
     }
   </script>
-
 </body>
 </html>
