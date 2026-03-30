@@ -7,19 +7,23 @@
       font-family: Arial, sans-serif;
       background: #0f172a;
       color: white;
-      padding: 40px;
       margin: 0;
+      padding: 40px;
+    }
+
+    .container {
       max-width: 900px;
     }
 
     h1 {
-      font-size: 48px;
+      font-size: 52px;
       margin-bottom: 10px;
     }
 
     h2 {
-      margin-top: 40px;
       font-size: 28px;
+      margin-top: 40px;
+      margin-bottom: 12px;
     }
 
     p, li {
@@ -33,17 +37,19 @@
 
     .card {
       background: #020617;
+      border-radius: 14px;
       padding: 24px;
-      border-radius: 12px;
       margin-top: 20px;
     }
 
-    .cta {
-      margin-top: 40px;
-      background: #111827;
-      border: 1px solid #1f2937;
-      padding: 24px;
-      border-radius: 12px;
+    .warning {
+      color: #f87171;
+      font-weight: bold;
+    }
+
+    .highlight {
+      color: #fbbf24;
+      font-weight: bold;
     }
 
     .button {
@@ -51,113 +57,117 @@
       background: #22c55e;
       color: white;
       text-decoration: none;
-      padding: 12px 18px;
-      border-radius: 6px;
-      margin-top: 12px;
+      padding: 14px 22px;
+      border-radius: 8px;
       font-weight: bold;
+      margin-top: 16px;
     }
 
-    .small {
-      color: #64748b;
-      font-size: 14px;
+    .button:hover {
+      opacity: 0.95;
     }
 
     ul {
       padding-left: 22px;
     }
+
+    .small {
+      color: #64748b;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    .price-box {
+      background: #111827;
+      border: 1px solid #1f2937;
+      border-radius: 14px;
+      padding: 24px;
+      margin-top: 30px;
+    }
+
+    .price {
+      font-size: 38px;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    .section-space {
+      margin-top: 50px;
+    }
   </style>
 </head>
 <body>
-  <h1>Your 7-Day Scroll Reset</h1>
-  <p class="muted">You do not need more motivation. You need a system.</p>
+  <div class="container">
+    <h1>Break the Scroll Habit in 7 Days</h1>
+    <p class="muted">You do not need more motivation. You need a system that stops the loop.</p>
 
-  <div class="card">
-    <p><strong>What this is:</strong> a simple 7-day reset to break the automatic scroll loop and get control back.</p>
-    <p><strong>What this is not:</strong> a productivity cult, a dopamine detox fantasy, or a plan that expects you to become a robot overnight.</p>
-  </div>
+    <div class="card">
+      <p class="warning">If you keep scrolling like this, the cost is not just time.</p>
+      <p>It is money. Focus. Sleep. Momentum. Self-respect.</p>
+      <p>You already felt that on ScrollTax. Now this is the part where you actually fix it.</p>
+    </div>
 
-  <h2>Day 1 — Make scrolling harder</h2>
-  <div class="card">
-    <ul>
-      <li>Move TikTok, Instagram, or your worst app off your home screen.</li>
-      <li>Log out of the app.</li>
-      <li>Turn off all non-essential notifications.</li>
-    </ul>
-    <p>The goal is not discipline yet. The goal is friction.</p>
-  </div>
+    <h2>What this reset does</h2>
+    <div class="card">
+      <ul>
+        <li>breaks the automatic urge to open scrolling apps</li>
+        <li>helps you identify what triggers the habit</li>
+        <li>gives you replacements so you do not fall right back in</li>
+        <li>helps you take control without becoming extreme or unrealistic</li>
+      </ul>
+    </div>
 
-  <h2>Day 2 — Catch the trigger</h2>
-  <div class="card">
-    <ul>
-      <li>Before you open a scrolling app, ask: “What am I avoiding right now?”</li>
-      <li>Write down the answer once or twice today.</li>
-      <li>Notice whether it is boredom, stress, fatigue, or procrastination.</li>
-    </ul>
-    <p>You are not just fighting an app. You are interrupting a pattern.</p>
-  </div>
+    <h2>What happens if you do nothing</h2>
+    <div class="card">
+      <p>You already know the pattern:</p>
+      <ul>
+        <li>“just 10 minutes” turns into an hour</li>
+        <li>you feel worse after, not better</li>
+        <li>you tell yourself tomorrow will be different</li>
+        <li>nothing changes</li>
+      </ul>
+      <p class="highlight">Most people stay stuck in that loop for years.</p>
+    </div>
 
-  <h2>Day 3 — Replace, do not just remove</h2>
-  <div class="card">
-    <ul>
-      <li>Choose 3 replacements for scrolling: a walk, music, push-ups, tea, journaling, reading, anything simple.</li>
-      <li>When the urge hits, do one replacement first for 5 minutes.</li>
-    </ul>
-    <p>If you remove the habit without replacing it, the loop comes back.</p>
-  </div>
+    <h2>What you get</h2>
+    <div class="card">
+      <ul>
+        <li><strong>Day 1:</strong> remove friction killers and make scrolling harder</li>
+        <li><strong>Day 2:</strong> identify your real trigger: boredom, stress, fatigue, avoidance</li>
+        <li><strong>Day 3:</strong> replace scrolling with fast, low-effort alternatives</li>
+        <li><strong>Day 4:</strong> create one protected no-scroll zone in your day</li>
+        <li><strong>Day 5:</strong> measure the real cost so your brain stops minimizing it</li>
+        <li><strong>Day 6:</strong> build a shutoff ritual that actually sticks</li>
+        <li><strong>Day 7:</strong> lock in one identity shift so you stop defaulting back</li>
+      </ul>
+    </div>
 
-  <h2>Day 4 — Create one no-scroll zone</h2>
-  <div class="card">
-    <ul>
-      <li>Pick one moment of the day that becomes scroll-free.</li>
-      <li>Best options: first 30 minutes after waking up, during meals, or the last hour before bed.</li>
-    </ul>
-    <p>Do not try to fix your whole life. Just claim one zone back.</p>
-  </div>
+    <h2>Why this works</h2>
+    <div class="card">
+      <p>Because this is not based on guilt alone.</p>
+      <p>It is based on <strong>friction, replacement, awareness, and control</strong>.</p>
+      <p>That is what actually changes behavior.</p>
+    </div>
 
-  <h2>Day 5 — Measure the cost</h2>
-  <div class="card">
-    <ul>
-      <li>Check your screen time.</li>
-      <li>Multiply your scroll hours by €15.</li>
-      <li>Write this number down.</li>
-    </ul>
-    <p>What gets measured becomes real. What becomes real becomes changeable.</p>
-  </div>
+    <div class="price-box section-space">
+      <h2 style="margin-top:0;">Get the full ScrollTax Reset</h2>
+      <p>One simple system. No fluff. No self-help nonsense. Just a practical reset that helps you get control back.</p>
 
-  <h2>Day 6 — Build a shutoff ritual</h2>
-  <div class="card">
-    <ul>
-      <li>Choose a fixed end to your scrolling day.</li>
-      <li>At that time, put your phone away and do the same short routine every night.</li>
-      <li>Example: phone away, shower, water, lights dim, bed.</li>
-    </ul>
-    <p>Habits break faster when they are replaced by rituals.</p>
-  </div>
+      <div class="price">€9</div>
 
-  <h2>Day 7 — Decide who you want to be</h2>
-  <div class="card">
-    <ul>
-      <li>Write one sentence: “I am someone who does not waste hours by default.”</li>
-      <li>Pick one rule to keep for next week.</li>
-      <li>Keep it small enough that you will actually follow it.</li>
-    </ul>
-    <p>Do not aim for perfect. Aim for control.</p>
-  </div>
+      <a href="#" class="button">Get the full reset now</a>
 
-  <div class="cta">
-    <h2 style="margin-top:0;">Want the full version?</h2>
-    <p>The full ScrollTax reset includes:</p>
-    <ul>
-      <li>daily prompts</li>
-      <li>anti-scroll scripts</li>
-      <li>replacement habit list</li>
-      <li>relapse prevention plan</li>
-    </ul>
+      <p class="small">Replace this link with your Stripe or Gumroad checkout link.</p>
+      <p class="small">One-time payment.</p>
+    </div>
 
-    <p><strong>Price: €9</strong></p>
-
-    <a href="#" class="button">Get the full reset</a>
-    <p class="small">Replace this button link later with your Stripe or Gumroad checkout link.</p>
+    <div class="card section-space">
+      <p><strong>Read this carefully:</strong></p>
+      <p>You do not have a motivation problem.</p>
+      <p>You have a loop.</p>
+      <p>The longer you stay in it, the more normal it feels.</p>
+      <p class="warning">That is exactly why most people never fix it.</p>
+    </div>
   </div>
 </body>
 </html>
