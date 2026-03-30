@@ -3,31 +3,33 @@
 <head>
   <title>ScrollTax</title>
   <style>
-  body {
-    font-family: Arial;
-    background: #0f172a;
-    color: white;
-    padding: 40px;
-  }
+    body {
+      font-family: Arial;
+      background: #0f172a;
+      color: white;
+      padding: 40px;
+    }
 
-  input, button {
-    padding: 10px;
-    margin-top: 10px;
-  }
+    input, button {
+      padding: 10px;
+      margin-top: 10px;
+    }
 
-  button {
-    background: #22c55e;
-    border: none;
-    cursor: pointer;
-  }
+    button {
+      background: #22c55e;
+      border: none;
+      cursor: pointer;
+      color: white;
+    }
 
-  pre {
-    margin-top: 20px;
-    background: #020617;
-    padding: 20px;
-    border-radius: 10px;
-  }
-</style>
+    pre {
+      margin-top: 20px;
+      background: #020617;
+      padding: 20px;
+      border-radius: 10px;
+      white-space: pre-wrap;
+    }
+  </style>
 </head>
 <body>
   <h1>ScrollTax</h1>
@@ -35,80 +37,54 @@
   <input id="hours" type="number" />
   <button onclick="calculate()">Calculate</button>
 
-<pre id="result"></pre>
+  <pre id="result"></pre>
 
-<div id="cta" style="margin-top:30px; display:none;">
-  <p style="font-size:18px;"><strong>You thought you were relaxing.</strong></p>
-  <p style="color:#94a3b8;">You weren’t. You just lost time.</p>
+  <div id="cta" style="margin-top:30px; display:none;">
+    <p style="font-size:18px;"><strong>You thought you were relaxing.</strong></p>
+    <p style="color:#94a3b8;">You weren’t. You just lost time.</p>
 
-  <p style="margin-top:15px;">
-    Stop wasting hours every day — fix it in 7 days
-  </p>
+    <p style="margin-top:15px;">
+      Stop wasting hours every day — fix it in 7 days
+    </p>
 
-  <input id="email" placeholder="Enter your email" style="padding:10px; width:250px;" />
-  <button onclick="captureEmail()" style="margin-left:10px;">Fix my habit</button>
+    <input id="email" placeholder="Enter your email" style="padding:10px; width:250px;" />
+    <button onclick="captureEmail()" style="margin-left:10px;">Fix my habit</button>
 
-  <p style="color:#64748b; font-size:12px;">
-    No spam. Just a simple reset plan.
-  </p>
+    <p style="color:#64748b; font-size:12px;">
+      No spam. Just a simple reset plan.
+    </p>
 
-  <p id="success" style="color:#22c55e; display:none;">
-    Check your inbox.
-  </p>
-</div>
-async function calculate() {
-  const hours = document.getElementById('hours').value;
+    <p id="success" style="color:#22c55e; display:none;">
+      Check your inbox.
+    </p>
+  </div>
 
-  const res = await fetch('/api/scrolltax', {
-    method: 'POST',
-    body: JSON.stringify({ hours }),
-    headers: { 'Content-Type': 'application/json' }
-  });
+  <script>
+    async function calculate() {
+      const hours = document.getElementById('hours').value;
 
-  const data = await res.text();
-  document.getElementById('result').innerText = data;
+      const res = await fetch('/api/scrolltax', {
+        method: 'POST',
+        body: JSON.stringify({ hours }),
+        headers: { 'Content-Type': 'application/json' }
+      });
 
-  // 👉 CTA zichtbaar maken
-  document.getElementById('cta').style.display = 'block';
-}
+      const data = await res.text();
+      document.getElementById('result').innerText = data;
+      document.getElementById('cta').style.display = 'block';
+    }
 
-function captureEmail() {
-  const email = document.getElementById('email').value;
+    function captureEmail() {
+      const email = document.getElementById('email').value;
 
-  if (!email) return alert("Enter email");
+      if (!email) {
+        alert("Enter email");
+        return;
+      }
 
-  console.log("Email captured:", email);
-
-  document.getElementById('success').style.display = 'block';
-}
-</script>
-<script>
-async function calculate() {
-  const hours = document.getElementById('hours').value;
-
-  const res = await fetch('/api/scrolltax', {
-    method: 'POST',
-    body: JSON.stringify({ hours }),
-    headers: { 'Content-Type': 'application/json' }
-  });
-
-  const data = await res.text();
-  document.getElementById('result').innerText = data;
-
-  // CTA zichtbaar maken
-  document.getElementById('cta').style.display = 'block';
-}
-
-function captureEmail() {
-  const email = document.getElementById('email').value;
-
-  if (!email) return alert("Enter email");
-
-  console.log("Email captured:", email);
-
-  document.getElementById('success').style.display = 'block';
-}
-</script>
-  
+      console.log("Email captured:", email);
+      document.getElementById('success').style.display = 'block';
+    }
+  </script>
 </body>
 </html>
