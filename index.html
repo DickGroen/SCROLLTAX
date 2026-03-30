@@ -31,32 +31,43 @@
     }
   </style>
 </head>
+
 <body>
   <h1>ScrollTax</h1>
   <p>How many hours did you scroll today?</p>
+
   <input id="hours" type="number" />
   <button onclick="calculate()">Calculate</button>
 
   <pre id="result"></pre>
 
+  <!-- 🔥 CTA -->
   <div id="cta" style="margin-top:30px; display:none;">
+    
     <p style="font-size:18px;"><strong>You thought you were relaxing.</strong></p>
     <p style="color:#94a3b8;">You weren’t. You just lost time.</p>
+
+    <p style="color:#f87171; margin-top:10px;">
+      Every day you wait = more time gone.
+    </p>
 
     <p style="margin-top:15px;">
       Stop wasting hours every day — fix it in 7 days
     </p>
 
-    <input id="email" placeholder="Enter your email" style="padding:10px; width:250px;" />
-    <button onclick="captureEmail()" style="margin-left:10px;">Fix my habit</button>
+    <input id="email" placeholder="Enter your email" style="width:250px;" />
+    <button onclick="captureEmail()" style="margin-left:10px;">
+      Fix my habit
+    </button>
 
     <p style="color:#64748b; font-size:12px;">
       No spam. Just a simple reset plan.
     </p>
 
     <p id="success" style="color:#22c55e; display:none;">
-      Check your inbox.
+      You're one step away from fixing this.
     </p>
+
   </div>
 
   <script>
@@ -71,6 +82,8 @@
 
       const data = await res.text();
       document.getElementById('result').innerText = data;
+
+      // CTA tonen
       document.getElementById('cta').style.display = 'block';
     }
 
@@ -78,13 +91,18 @@
       const email = document.getElementById('email').value;
 
       if (!email) {
-        alert("Enter email");
+        alert("Enter your email");
         return;
       }
 
-      console.log("Email captured:", email);
+      // 👉 tijdelijk (later vervangen door echte opslag)
+      console.log("Email:", email);
+
+      alert("Check your inbox — your reset plan is coming.");
+
       document.getElementById('success').style.display = 'block';
     }
   </script>
+
 </body>
 </html>
