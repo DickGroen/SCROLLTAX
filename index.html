@@ -72,7 +72,8 @@
 
   <script>
     async function calculate() {
-      const hours = document.getElementById('hours').value;
+     const hours = body.hours;
+const money = hours * 15;
 
       const res = await fetch('/api/scrolltax', {
         method: 'POST',
