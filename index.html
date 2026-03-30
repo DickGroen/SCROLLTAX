@@ -36,7 +36,19 @@
   <button onclick="calculate()">Calculate</button>
 
   <pre id="result"></pre>
+<div id="cta" style="margin-top:30px; display:none;">
+  <p style="font-size:18px;"><strong>You thought you were relaxing.</strong></p>
+  <p style="color:#94a3b8;">You weren’t. You just lost time.</p>
 
+  <p style="margin-top:15px;">
+    Break the scroll loop in 7 days.
+  </p>
+
+  <input id="email" placeholder="Enter your email" style="padding:10px; width:250px;" />
+  <button onclick="captureEmail()" style="margin-left:10px;">Get the plan</button>
+
+  <p id="success" style="color:#22c55e; display:none;">Check your inbox.</p>
+</div>
   <script>
     async function calculate() {
       const hours = document.getElementById('hours').value;
