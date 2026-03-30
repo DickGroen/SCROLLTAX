@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ScrollTax Reset Plan</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: white;
+      padding: 40px;
+      margin: 0;
+      max-width: 900px;
+    }
+
+    h1 {
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      margin-top: 40px;
+      font-size: 28px;
+    }
+
+    p, li {
+      line-height: 1.7;
+      font-size: 18px;
+    }
+
+    .muted {
+      color: #94a3b8;
+    }
+
+    .card {
+      background: #020617;
+      padding: 24px;
+      border-radius: 12px;
+      margin-top: 20px;
+    }
+
+    .cta {
+      margin-top: 40px;
+      background: #111827;
+      border: 1px solid #1f2937;
+      padding: 24px;
+      border-radius: 12px;
+    }
+
+    .button {
+      display: inline-block;
+      background: #22c55e;
+      color: white;
+      text-decoration: none;
+      padding: 12px 18px;
+      border-radius: 6px;
+      margin-top: 12px;
+      font-weight: bold;
+    }
+
+    .small {
+      color: #64748b;
+      font-size: 14px;
+    }
+
+    ul {
+      padding-left: 22px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Your 7-Day Scroll Reset</h1>
+  <p class="muted">You do not need more motivation. You need a system.</p>
+
+  <div class="card">
+    <p><strong>What this is:</strong> a simple 7-day reset to break the automatic scroll loop and get control back.</p>
+    <p><strong>What this is not:</strong> a productivity cult, a dopamine detox fantasy, or a plan that expects you to become a robot overnight.</p>
+  </div>
+
+  <h2>Day 1 — Make scrolling harder</h2>
+  <div class="card">
+    <ul>
+      <li>Move TikTok, Instagram, or your worst app off your home screen.</li>
+      <li>Log out of the app.</li>
+      <li>Turn off all non-essential notifications.</li>
+    </ul>
+    <p>The goal is not discipline yet. The goal is friction.</p>
+  </div>
+
+  <h2>Day 2 — Catch the trigger</h2>
+  <div class="card">
+    <ul>
+      <li>Before you open a scrolling app, ask: “What am I avoiding right now?”</li>
+      <li>Write down the answer once or twice today.</li>
+      <li>Notice whether it is boredom, stress, fatigue, or procrastination.</li>
+    </ul>
+    <p>You are not just fighting an app. You are interrupting a pattern.</p>
+  </div>
+
+  <h2>Day 3 — Replace, do not just remove</h2>
+  <div class="card">
+    <ul>
+      <li>Choose 3 replacements for scrolling: a walk, music, push-ups, tea, journaling, reading, anything simple.</li>
+      <li>When the urge hits, do one replacement first for 5 minutes.</li>
+    </ul>
+    <p>If you remove the habit without replacing it, the loop comes back.</p>
+  </div>
+
+  <h2>Day 4 — Create one no-scroll zone</h2>
+  <div class="card">
+    <ul>
+      <li>Pick one moment of the day that becomes scroll-free.</li>
+      <li>Best options: first 30 minutes after waking up, during meals, or the last hour before bed.</li>
+    </ul>
+    <p>Do not try to fix your whole life. Just claim one zone back.</p>
+  </div>
+
+  <h2>Day 5 — Measure the cost</h2>
+  <div class="card">
+    <ul>
+      <li>Check your screen time.</li>
+      <li>Multiply your scroll hours by €15.</li>
+      <li>Write this number down.</li>
+    </ul>
+    <p>What gets measured becomes real. What becomes real becomes changeable.</p>
+  </div>
+
+  <h2>Day 6 — Build a shutoff ritual</h2>
+  <div class="card">
+    <ul>
+      <li>Choose a fixed end to your scrolling day.</li>
+      <li>At that time, put your phone away and do the same short routine every night.</li>
+      <li>Example: phone away, shower, water, lights dim, bed.</li>
+    </ul>
+    <p>Habits break faster when they are replaced by rituals.</p>
+  </div>
+
+  <h2>Day 7 — Decide who you want to be</h2>
+  <div class="card">
+    <ul>
+      <li>Write one sentence: “I am someone who does not waste hours by default.”</li>
+      <li>Pick one rule to keep for next week.</li>
+      <li>Keep it small enough that you will actually follow it.</li>
+    </ul>
+    <p>Do not aim for perfect. Aim for control.</p>
+  </div>
+
+  <div class="cta">
+    <h2 style="margin-top:0;">Want the full version?</h2>
+    <p>The full ScrollTax reset includes:</p>
+    <ul>
+      <li>daily prompts</li>
+      <li>anti-scroll scripts</li>
+      <li>replacement habit list</li>
+      <li>relapse prevention plan</li>
+    </ul>
+
+    <p><strong>Price: €9</strong></p>
+
+    <a href="#" class="button">Get the full reset</a>
+    <p class="small">Replace this button link later with your Stripe or Gumroad checkout link.</p>
+  </div>
+</body>
+</html>
