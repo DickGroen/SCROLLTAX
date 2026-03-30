@@ -14,11 +14,16 @@ export async function onRequestPost(context) {
     const prompt = `
 User scrolled for: ${hours} hours
 
-Act as a direct, slightly confrontational coach.
+Be brutally honest and emotionally impactful.
 
-1. Calculate money lost (€15/hour)
-2. Say what they could have done
-3. Give a short reality check
+Structure your response EXACTLY like this:
+
+1. Start with a shocking sentence about how much time and money was wasted.
+2. Calculate money lost (€15/hour) in a bold way.
+3. Compare it to something painful (like rent, vacation, etc).
+4. End with a short, harsh reality check.
+
+Keep it short, punchy, and very direct.
 `;
 
     const response = await fetch("https://api.openai.com/v1/responses", {
