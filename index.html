@@ -1,144 +1,113 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>ScrollTax</title>
+  <title>Offerte Generator</title>
 
   <style>
     body {
       font-family: Arial;
-      background: linear-gradient(180deg, #020617, #0f172a);
+      background: #0f172a;
       color: white;
       padding: 40px;
     }
 
     h1 {
-      font-size: 56px;
-      margin-bottom: 10px;
+      font-size: 40px;
     }
 
-    .subtitle {
-      color: #94a3b8;
-      margin-bottom: 30px;
-    }
-
-    input, button {
-      padding: 12px;
+    input, select, button {
+      padding: 10px;
       margin-top: 10px;
-      font-size: 16px;
+      width: 260px;
+      display: block;
     }
 
     button {
       background: #22c55e;
       border: none;
       cursor: pointer;
-      font-weight: bold;
+      color: white;
+      width: auto;
     }
 
-    button:hover {
-      opacity: 0.9;
-    }
-
-    .card {
+    #result {
       margin-top: 20px;
       background: #020617;
       padding: 20px;
-      border-radius: 12px;
-      opacity: 0;
-      transform: translateY(10px);
-      transition: all 0.4s ease;
-    }
-
-    .card.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    #loading {
-      margin-top: 20px;
-      color: #94a3b8;
-      display: none;
-    }
-
-    #cta {
-      margin-top: 40px;
-      display: none;
-    }
-
-    .danger {
-      color: #f87171;
-    }
-
-    .highlight {
-      color: #fbbf24;
-    }
-
-    .small {
-      color: #64748b;
-      font-size: 12px;
+      border-radius: 10px;
+      white-space: pre-wrap;
     }
   </style>
 </head>
 
 <body>
 
-<h1>ScrollTax</h1>
-<p class="subtitle">Every hour you scroll is costing you.</p>
+<h1>Offerte Generator</h1>
 
-<p>How many hours did you scroll today?</p>
-<input id="hours" type="number" placeholder="e.g. 5" />
-<button onclick="calculate()">Calculate</button>
+<input id="klant" placeholder="Klantnaam">
+<input id="bedrijf" placeholder="Bedrijfsnaam">
 
-<p id="loading">Calculating your damage...</p>
+<input id="project" placeholder="Type project">
+<input id="sector" placeholder="Sector">
 
-<div id="result" class="card"></div>
+<input id="prijs" type="number" placeholder="Prijs €">
+<input id="extra" placeholder="Extra info">
 
-<div id="cta">
-  <p style="font-size:20px;"><strong>You thought you were relaxing.</strong></p>
-  <p style="color:#94a3b8;">You weren’t. You just lost time.</p>
+<select id="stijl">
+  <option value="zakelijk">Zakelijk</option>
+  <option value="warm">Warm</option>
+  <option value="sales">Sales</option>
+</select>
 
-  <p class="danger">Every day you wait = more time gone.</p>
-  <p class="highlight">Most people stay stuck in this loop for years.</p>
+<button onclick="genereer()">Genereer offerte</button>
 
-  <p>Stop wasting hours every day — fix it in 7 days</p>
-
-  <input id="email" placeholder="Enter your email" />
-  <button onclick="captureEmail()">Send me the plan</button>
-
-  <p class="small">No spam. Just a simple reset plan.</p>
-</div>
+<div id="result"></div>
 
 <script>
-async function calculate() {
-  const hours = document.getElementById('hours').value;
+async function genereer() {
+  const klant = document.getElementById('klant').value;
+  const bedrijf = document.getElementById('bedrijf').value;
+  const project = document.getElementById('project').value;
+  const sector = document.getElementById('sector').value;
+  const prijs = document.getElementById('prijs').value;
+  const extra = document.getElementById('extra').value;
+  const stijl = document.getElementById('stijl').value;
 
-  if (!hours) return alert("Enter hours");
+  if (!project || !sector || !prijs) {
+    alert("Vul alles in");
+    return;
+  }
 
-  document.getElementById('loading').style.display = 'block';
+  document.getElementById('result').innerText = "Genereren...";
 
-  const res = await fetch('/api/scrolltax', {
-    method: 'POST',
-    body: JSON.stringify({ hours }),
-    headers: { 'Content-Type': 'application/json' }
-  });
+  const prompt = `
+Schrijf een professionele offerte.
 
-  const data = await res.text();
+Klant: ${klant}
+Bedrijf: ${bedrijf}
+Project: ${project}
+Sector: ${sector}
+Prijs: €${prijs}
+Extra: ${extra}
 
-  document.getElementById('loading').style.display = 'none';
+Stijl: ${stijl}
 
-  const resultBox = document.getElementById('result');
-  resultBox.innerText = data;
-  resultBox.classList.add('show');
+Kort, duidelijk, overtuigend.
+`;
 
-  document.getElementById('cta').style.display = 'block';
-}
+  try {
+    const res = await fetch('/api/scrolltax', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt })
+    });
 
-function captureEmail() {
-  const email = document.getElementById('email').value;
+    const text = await res.text();
+    document.getElementById('result').innerText = text;
 
-  if (!email) return alert("Enter email");
-
-  // tijdelijk → later koppelen aan backend
-  window.location.href = "https://scrolltax.pages.dev/plan.html";
+  } catch (e) {
+    document.getElementById('result').innerText = "Fout bij genereren";
+  }
 }
 </script>
 
