@@ -2,169 +2,145 @@
 <html>
 <head>
   <title>ScrollTax</title>
+
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #0f172a;
+      font-family: Arial;
+      background: linear-gradient(180deg, #020617, #0f172a);
       color: white;
       padding: 40px;
-      margin: 0;
     }
 
     h1 {
-      font-size: 58px;
+      font-size: 56px;
       margin-bottom: 10px;
     }
 
-    p {
-      line-height: 1.5;
+    .subtitle {
+      color: #94a3b8;
+      margin-bottom: 30px;
     }
 
     input, button {
-      padding: 10px;
+      padding: 12px;
       margin-top: 10px;
       font-size: 16px;
-    }
-
-    input {
-      width: 250px;
-      border: none;
-      border-radius: 2px;
     }
 
     button {
       background: #22c55e;
       border: none;
       cursor: pointer;
-      color: white;
-      margin-left: 10px;
+      font-weight: bold;
     }
 
     button:hover {
-      opacity: 0.95;
+      opacity: 0.9;
     }
 
-    pre {
+    .card {
       margin-top: 20px;
       background: #020617;
       padding: 20px;
-      border-radius: 10px;
-      white-space: pre-wrap;
-      line-height: 1.8;
-      font-size: 16px;
-      max-width: 1400px;
+      border-radius: 12px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.4s ease;
     }
 
-    #cta {
-      margin-top: 30px;
+    .card.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    #loading {
+      margin-top: 20px;
+      color: #94a3b8;
       display: none;
     }
 
-    .muted {
-      color: #94a3b8;
+    #cta {
+      margin-top: 40px;
+      display: none;
     }
 
-    .warning {
+    .danger {
       color: #f87171;
-      margin-top: 10px;
     }
 
-    .fomo {
+    .highlight {
       color: #fbbf24;
-      margin-top: 6px;
     }
 
     .small {
       color: #64748b;
       font-size: 12px;
     }
-
-    #success {
-      color: #22c55e;
-      display: none;
-      margin-top: 12px;
-    }
   </style>
 </head>
+
 <body>
-  <h1>ScrollTax</h1>
-  <p class="muted" style="font-size:20px; margin-top:0;">Every hour costs you.</p>
 
-  <p>How many hours did you scroll today?</p>
+<h1>ScrollTax</h1>
+<p class="subtitle">Every hour you scroll is costing you.</p>
 
-  <input id="hours" type="number" min="0" step="1" placeholder="Enter hours" />
-  <button onclick="calculate()">Calculate</button>
+<p>How many hours did you scroll today?</p>
+<input id="hours" type="number" placeholder="e.g. 5" />
+<button onclick="calculate()">Calculate</button>
 
-  <pre id="result"></pre>
+<p id="loading">Calculating your damage...</p>
 
-  <div id="cta">
-    <p style="font-size:18px;"><strong>You thought you were relaxing.</strong></p>
-    <p class="muted">You weren’t. You just lost time.</p>
+<div id="result" class="card"></div>
 
-    <p class="warning">Every day you wait = more time gone.</p>
-    <p class="fomo">Most people stay stuck in this loop for years.</p>
+<div id="cta">
+  <p style="font-size:20px;"><strong>You thought you were relaxing.</strong></p>
+  <p style="color:#94a3b8;">You weren’t. You just lost time.</p>
 
-    <p style="margin-top:15px;">
-      Break your scroll habit in 7 days
-    </p>
+  <p class="danger">Every day you wait = more time gone.</p>
+  <p class="highlight">Most people stay stuck in this loop for years.</p>
 
-    <input id="email" type="email" placeholder="Enter your email" />
-    <button onclick="captureEmail()">Send me the plan</button>
+  <p>Stop wasting hours every day — fix it in 7 days</p>
 
-    <p class="small">No spam. Just a simple reset plan.</p>
-    <p class="small">Takes less than 60 seconds.</p>
+  <input id="email" placeholder="Enter your email" />
+  <button onclick="captureEmail()">Send me the plan</button>
 
-    <p id="success">You're one step away from fixing this.</p>
-  </div>
+  <p class="small">No spam. Just a simple reset plan.</p>
+</div>
 
-  <script>
-    async function calculate() {
-      const hoursInput = document.getElementById('hours');
-      const result = document.getElementById('result');
-      const cta = document.getElementById('cta');
+<script>
+async function calculate() {
+  const hours = document.getElementById('hours').value;
 
-      const hours = hoursInput.value.trim();
+  if (!hours) return alert("Enter hours");
 
-      if (!hours) {
-        alert('Enter your hours first');
-        return;
-      }
+  document.getElementById('loading').style.display = 'block';
 
-      result.innerText = 'Loading...';
+  const res = await fetch('/api/scrolltax', {
+    method: 'POST',
+    body: JSON.stringify({ hours }),
+    headers: { 'Content-Type': 'application/json' }
+  });
 
-      try {
-        const res = await fetch('/api/scrolltax', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ hours: Number(hours) })
-        });
+  const data = await res.text();
 
-        const text = await res.text();
-        result.innerText = text;
-        cta.style.display = 'block';
-      } catch (error) {
-        result.innerText = 'Something went wrong. Please try again.';
-        console.error(error);
-      }
-    }
+  document.getElementById('loading').style.display = 'none';
 
-    function captureEmail() {
-      const emailInput = document.getElementById('email');
-      const success = document.getElementById('success');
-      const email = emailInput.value.trim();
+  const resultBox = document.getElementById('result');
+  resultBox.innerText = data;
+  resultBox.classList.add('show');
 
-      if (!email) {
-        alert('Enter your email');
-        return;
-      }
+  document.getElementById('cta').style.display = 'block';
+}
 
-      console.log('Email captured:', email);
-      success.style.display = 'block';
+function captureEmail() {
+  const email = document.getElementById('email').value;
 
-      setTimeout(() => {
-        window.location.href = 'https://scrolltax.pages.dev/plan.html';
-      }, 700);
-    }
-  </script>
+  if (!email) return alert("Enter email");
+
+  // tijdelijk → later koppelen aan backend
+  window.location.href = "https://scrolltax.pages.dev/plan.html";
+}
+</script>
+
 </body>
 </html>
