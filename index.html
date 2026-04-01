@@ -47,21 +47,29 @@
       gap: 12px; flex-wrap: wrap;
       padding: 10px 22px;
     }
+
     .bar-text { font-size: 14px; color: var(--muted); }
+
     .bar-btn {
       font-family: 'Syne', sans-serif;
-      font-weight: 700; font-size: 15px;
-      background: var(--green); color: #fff;
-      padding: 9px 20px; border-radius: 8px;
-      text-decoration: none; white-space: nowrap;
+      font-weight: 700;
+      font-size: 15px;
+      background: var(--green);
+      color: #fff;
+      padding: 9px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      white-space: nowrap;
       transition: opacity .15s;
     }
+
     .bar-btn:hover { opacity: .9; }
 
     h1, h2, h3 { font-family: 'Syne', sans-serif; color: var(--white); }
     h1 { font-size: clamp(32px, 6.5vw, 56px); line-height: 1.04; font-weight: 800; letter-spacing: -.025em; }
     h2 { font-size: clamp(22px, 4vw, 32px); font-weight: 700; line-height: 1.15; margin-bottom: 16px; }
     h3 { font-size: 19px; font-weight: 700; margin-bottom: 8px; }
+
     p  { color: var(--text); margin-bottom: 14px; }
     p:last-child { margin-bottom: 0; }
     strong { color: var(--white); }
@@ -71,6 +79,7 @@
     .mt20 { margin-top: 20px; }
     .mt8  { margin-top: 8px; }
     .mb0  { margin-bottom: 0 !important; }
+
     .green { color: var(--green); }
     .red   { color: var(--red); }
     .amber { color: var(--amber); }
@@ -84,8 +93,9 @@
       border-radius: 16px;
       padding: 28px;
     }
-    .card-red   { background: #100a0a; border-color: #2d1010; }
-    .card-dark  { background: var(--bg3); border-color: var(--border2); }
+
+    .card-red  { background: #100a0a; border-color: #2d1010; }
+    .card-dark { background: var(--bg3); border-color: var(--border2); }
 
     .btn {
       display: block;
@@ -100,32 +110,68 @@
       cursor: pointer;
       transition: transform .15s, box-shadow .15s;
     }
+
     .btn-green {
       background: var(--green);
       color: #fff;
       box-shadow: 0 4px 28px var(--green-glow);
     }
-    .btn-green:hover { transform: translateY(-2px); box-shadow: 0 8px 36px rgba(34,197,94,.3); }
-    .micro { font-size: 13px; color: var(--dim); text-align: center; margin-top: 11px; }
+
+    .btn-green:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 36px rgba(34,197,94,.3);
+    }
+
+    .micro {
+      font-size: 13px;
+      color: var(--dim);
+      text-align: center;
+      margin-top: 11px;
+    }
 
     ul.check, ul.pain { list-style: none; padding: 0; }
+
     ul.check li, ul.pain li {
-      position: relative; padding-left: 28px;
-      margin-bottom: 12px; font-size: 17px; color: var(--text);
+      position: relative;
+      padding-left: 28px;
+      margin-bottom: 12px;
+      font-size: 17px;
+      color: var(--text);
     }
-    ul.check li::before { content: "✓"; color: var(--green); font-weight: 700; position: absolute; left: 0; }
-    ul.pain  li::before { content: "→"; color: var(--red);   font-weight: 700; position: absolute; left: 0; }
+
+    ul.check li::before {
+      content: "✓";
+      color: var(--green);
+      font-weight: 700;
+      position: absolute;
+      left: 0;
+    }
+
+    ul.pain li::before {
+      content: "→";
+      color: var(--red);
+      font-weight: 700;
+      position: absolute;
+      left: 0;
+    }
 
     .days { list-style: none; padding: 0; }
+
     .days li {
-      display: flex; gap: 16px; align-items: flex-start;
-      padding: 16px 0; border-bottom: 1px solid var(--border);
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
       font-size: 16px;
     }
+
     .days li:last-child { border-bottom: none; }
+
     .tag {
       font-family: 'Syne', sans-serif;
-      font-size: 11px; font-weight: 700;
+      font-size: 11px;
+      font-weight: 700;
       color: var(--green);
       background: rgba(34,197,94,.09);
       border: 1px solid rgba(34,197,94,.18);
@@ -136,25 +182,64 @@
       flex-shrink: 0;
     }
 
-    .testi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-    @media (max-width: 520px) { .testi-grid { grid-template-columns: 1fr; } }
+    .testi-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    @media (max-width: 520px) {
+      .testi-grid { grid-template-columns: 1fr; }
+    }
+
     .testi {
       background: var(--bg3);
       border: 1px solid var(--border2);
       border-radius: 14px;
       padding: 20px;
     }
-    .testi p { font-size: 16px; font-style: italic; margin-bottom: 10px; }
-    .testi .who { font-size: 13px; color: var(--dim); font-style: normal; }
 
-    .what-you-get { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
-    .get-item {
-      display: flex; align-items: flex-start; gap: 12px;
-      background: var(--bg3); border: 1px solid var(--border2);
-      border-radius: 10px; padding: 14px 16px;
+    .testi p {
+      font-size: 16px;
+      font-style: italic;
+      margin-bottom: 10px;
     }
-    .get-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
-    .get-text { font-size: 16px; color: var(--text); line-height: 1.5; }
+
+    .testi .who {
+      font-size: 13px;
+      color: var(--dim);
+      font-style: normal;
+    }
+
+    .what-you-get {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .get-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: var(--bg3);
+      border: 1px solid var(--border2);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+
+    .get-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .get-text {
+      font-size: 16px;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
     .get-text strong { color: var(--white); }
 
     .price-block {
@@ -165,20 +250,41 @@
       position: relative;
       overflow: hidden;
     }
+
     .price-block::after {
       content: '';
-      position: absolute; top: -80px; right: -80px;
-      width: 240px; height: 240px;
+      position: absolute;
+      top: -80px;
+      right: -80px;
+      width: 240px;
+      height: 240px;
       background: radial-gradient(circle, rgba(34,197,94,.07) 0%, transparent 70%);
       pointer-events: none;
     }
-    .price-label { font-size: 13px; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .05em; }
+
+    .price-label {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+
     .price-num {
       font-family: 'Syne', sans-serif;
-      font-size: 64px; font-weight: 800;
-      color: var(--white); line-height: 1; margin-bottom: 6px;
+      font-size: 64px;
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 6px;
     }
-    .price-context { font-size: 15px; color: var(--muted); margin-bottom: 26px; }
+
+    .price-context {
+      font-size: 15px;
+      color: var(--muted);
+      margin-bottom: 26px;
+    }
+
     .trust {
       background: rgba(5,46,22,.5);
       border: 1px solid #166534;
@@ -186,37 +292,72 @@
       padding: 14px 18px;
       margin-top: 16px;
     }
-    .trust p { font-size: 15px; color: #dcfce7; }
+
+    .trust p {
+      font-size: 15px;
+      color: #dcfce7;
+    }
+
     .guarantee {
-      display: flex; gap: 14px; align-items: flex-start;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
       background: rgba(15,32,53,.8);
       border: 1px solid var(--border2);
       border-radius: 10px;
       padding: 16px 18px;
       margin-top: 16px;
     }
-    .guarantee-icon { font-size: 22px; flex-shrink: 0; }
-    .guarantee-text { font-size: 15px; color: var(--muted); line-height: 1.6; }
+
+    .guarantee-icon {
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .guarantee-text {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
     .guarantee-text strong { color: var(--white); }
-    .urgency-line { font-size: 15px; color: var(--amber); text-align: center; }
+
+    .urgency-line {
+      font-size: 15px;
+      color: var(--amber);
+      text-align: center;
+    }
 
     ul.faq { list-style: none; padding: 0; }
-    ul.faq li { padding: 20px 0; border-bottom: 1px solid var(--border); }
-    ul.faq li:last-child { border-bottom: none; padding-bottom: 0; }
-    ul.faq p { font-size: 16px; color: var(--muted); margin-bottom: 0; }
+
+    ul.faq li {
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    ul.faq li:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    ul.faq p {
+      font-size: 16px;
+      color: var(--muted);
+      margin-bottom: 0;
+    }
   </style>
 </head>
 <body>
 
 <nav class="bar">
   <span class="bar-text">ScrollStop &nbsp;·&nbsp; 7-daags PDF-plan &nbsp;·&nbsp; €9</span>
-  <a href="https://buy.stripe.com/test_28E14mgT3bkZ4snd7DcEw00" class="bar-btn">
-    Start vandaag — €9
+  <a href="https://buy.stripe.com/test_eVqdR86epdt7cYT9VrcEw02" class="bar-btn">
+    Start vandaag — €9 (direct toegang)
   </a>
 </nav>
+
 <div class="wrap">
 
-<!-- ── HERO ── -->
 <section style="padding-top: 64px; padding-bottom: 20px;">
   <p style="font-size:14px; color:var(--green); letter-spacing:.06em; text-transform:uppercase; font-weight:600; margin-bottom:14px;">7-daags PDF-plan</p>
   <h1>Stop met zinloos scrollen. Krijg 2 uur per dag terug — in 7 dagen.</h1>
@@ -224,12 +365,10 @@
 
   <p style="font-size:15px; color:var(--green); font-weight:600; margin-bottom:24px;">De meeste mensen verminderen hun schermtijd met 20–50% binnen 7 dagen.</p>
 
-  <a href="https://buy.stripe.com/test_28E14mgT3bkZ4snd7DcEw00" class="btn btn-green">Start vandaag — €9, direct toegang</a>
+  <a href="https://buy.stripe.com/test_eVqdR86epdt7cYT9VrcEw02" class="btn btn-green">Start de 7-daagse reset → €9 (direct toegang)</a>
   <p class="micro">PDF &nbsp;·&nbsp; Direct te downloaden &nbsp;·&nbsp; Eenmalige betaling &nbsp;·&nbsp; Geen abonnement</p>
 </section>
 
-
-<!-- ── PAIN ── -->
 <section class="sec">
   <div class="card card-red">
     <h2 style="margin-bottom:16px;">Herkenbaar?</h2>
@@ -243,8 +382,6 @@
   </div>
 </section>
 
-
-<!-- ── SOLUTION ── -->
 <section class="sec">
   <h2>ScrollStop bestrijdt de gewoonte niet — het ontmantelt hem.</h2>
 
@@ -256,8 +393,6 @@
   </div>
 </section>
 
-
-<!-- ── THE PLAN ── -->
 <section class="sec" id="plan">
   <h2>Wat je elke dag doet</h2>
   <div class="card">
@@ -294,8 +429,6 @@
   </div>
 </section>
 
-
-<!-- ── WHAT YOU GET ── -->
 <section class="sec">
   <h2>Wat je krijgt</h2>
   <div class="what-you-get">
@@ -318,16 +451,14 @@
   </div>
 </section>
 
-
-<!-- ── FREE PREVIEW ── -->
 <section class="sec">
   <p style="font-size:13px; color:var(--green); letter-spacing:.08em; text-transform:uppercase; font-weight:700; margin-bottom:10px;">Gratis preview</p>
-  <h2 style="margin-bottom:14px;">Lees Dag 1 voordat je iets koopt.</h2>
+  <h2 style="margin-bottom:14px;">Ervaar het systeem — lees Dag 1 gratis</h2>
 
   <div class="card card-dark" style="text-align:center;">
     <p style="color:var(--muted); font-size:17px; line-height:1.65; margin-bottom:22px;">Dag 1 van het plan — volledige taken, structuur en format — zodat je de kwaliteit zelf kunt beoordelen voordat je €9 uitgeeft.</p>
 
-    <a href="preview.pdf" class="btn btn-green" style="max-width:440px; margin: 0 auto 12px; font-size:17px; padding:15px 24px;">Lees Dag 1 gratis — geen e-mail nodig</a>
+    <a href="preview.pdf" class="btn btn-green" style="max-width:440px; margin: 0 auto 12px; font-size:17px; padding:15px 24px;">Zie hoe het werkt → lees Dag 1 gratis</a>
 
     <p style="font-size:13px; color:var(--dim); margin-bottom:0;">PDF &nbsp;·&nbsp; Direct te openen &nbsp;·&nbsp; Geen aanmelding</p>
   </div>
@@ -335,8 +466,6 @@
   <p style="font-size:16px; color:var(--muted); margin-top:16px; line-height:1.65;">Dag 1 laat je zien hoe groot het probleem echt is. Hoe je het oplost — dat zijn de andere zes dagen.</p>
 </section>
 
-
-<!-- ── WHO IT'S FOR ── -->
 <section class="sec">
   <h2>Dit is voor jou als</h2>
   <div class="card">
@@ -351,8 +480,6 @@
   </div>
 </section>
 
-
-<!-- ── SOCIAL PROOF ── -->
 <section class="sec">
   <h2>Wat vroege gebruikers merkten</h2>
   <div class="testi-grid">
@@ -375,8 +502,6 @@
   </div>
 </section>
 
-
-<!-- ── PRICE / BUY ── -->
 <section class="sec">
   <div class="price-block">
     <h2 style="margin-bottom:8px;">Haal het ScrollStop-plan</h2>
@@ -384,11 +509,11 @@
 
     <p class="price-label">Eenmalige betaling. Voor altijd van jou.</p>
     <div class="price-num">€9</div>
-    <p class="price-context">Minder dan een koffie. Minder dan 30 minuten van de tijd die je op dag één al terugwint.</p>
+    <p class="price-context">Minder dan wat je vandaag al verliest aan scrollen.</p>
 
     <p style="font-size:15px; color:var(--green); font-weight:600; margin-bottom:24px;">De meeste mensen verminderen hun schermtijd met 20–50% binnen 7 dagen.</p>
 
-  <a href="https://buy.stripe.com/test_28E14mgT3bkZ4snd7DcEw00" class="btn btn-green">Start vandaag — €9, direct toegang</a>
+    <a href="https://buy.stripe.com/test_eVqdR86epdt7cYT9VrcEw02" class="btn btn-green">Start vandaag — €9 (direct toegang)</a>
     <p class="micro">PDF &nbsp;·&nbsp; Direct te downloaden &nbsp;·&nbsp; Geen abonnement &nbsp;·&nbsp; Werkt op elk apparaat</p>
 
     <div class="trust mt14">
@@ -407,13 +532,10 @@
   </div>
 </section>
 
-
-<!-- ── FAQ ── -->
 <section class="sec">
   <h2>Vragen vooraf</h2>
   <div class="card">
     <ul class="faq">
-
       <li>
         <h3>Ik heb al eerder geprobeerd minder te scrollen. Waarom zou dit anders zijn?</h3>
         <p>Omdat pogingen op basis van wilskracht altijd mislukken — en dit plan gebruikt geen wilskracht. Het richt zich op drempel, trigger en vervanging: de drie lagen waar de gewoonte écht zit. Andere aanpak, niet alleen andere verpakking.</p>
@@ -443,15 +565,11 @@
         <h3>€9 lijkt bijna te goedkoop. Zit er een upsell achter?</h3>
         <p>Nee. €9 is de prijs. Volledig plan inbegrepen. Er is geen premiumversie, geen abonnement, geen upsell achter de checkout. Eén betaling, alles erin.</p>
       </li>
-
     </ul>
   </div>
 </section>
 
-
-<!-- ── FINAL CTA ── -->
 <section style="margin-top: 64px; padding-bottom: 80px; text-align: center;">
-
   <h2 style="margin-bottom: 14px;">Twee opties vanaf hier.</h2>
 
   <div class="card card-dark" style="text-align:left; margin-bottom: 28px;">
@@ -459,9 +577,8 @@
     <p class="mb0"><span class="green">Optie 2:</span> Geef €9 uit, start het plan vandaag. Zeven dagen later is de loop zwakker. De automatische drang heeft minder grip. Je hebt je tijd terug.</p>
   </div>
 
-  <a href="https://buy.stripe.com/test_28E14mgT3bkZ4snd7DcEw00" class="btn btn-green" style="max-width: 480px; margin: 0 auto; display: block;">Start vandaag — €9</a>
+  <a href="https://buy.stripe.com/test_eVqdR86epdt7cYT9VrcEw02" class="btn btn-green" style="max-width: 480px; margin: 0 auto; display: block;">Start de reset → €9</a>
   <p class="micro">Eenmalige betaling &nbsp;·&nbsp; Direct te downloaden &nbsp;·&nbsp; Begin binnen 5 minuten</p>
-
 </section>
 
 </div>
