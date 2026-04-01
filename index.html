@@ -1,115 +1,469 @@
 <!DOCTYPE html>
-<html>
+<html lang="nl">
 <head>
-  <title>Offerte Generator</title>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ScrollStop — Stop met zinloos scrollen in 7 dagen</title>
+  <meta name="description" content="Een 7-daags plan dat de scrollgewoonte doorbreekt. Geen wilskracht nodig, geen apps verwijderen. €9, direct te downloaden." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg:         #07111e;
+      --bg2:        #0b1929;
+      --bg3:        #0f2035;
+      --border:     #162840;
+      --border2:    #1e3652;
+      --text:       #dde6f0;
+      --muted:      #7d9ab5;
+      --dim:        #3d5875;
+      --green:      #22c55e;
+      --green-glow: rgba(34,197,94,0.18);
+      --red:        #f87171;
+      --amber:      #fbbf24;
+      --white:      #ffffff;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
     body {
-      font-family: Arial;
-      background: #0f172a;
-      color: white;
-      padding: 40px;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 18px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
     }
 
-    h1 {
-      font-size: 40px;
-    }
+    .wrap { max-width: 680px; margin: 0 auto; padding: 0 22px; }
 
-    input, select, button {
-      padding: 10px;
-      margin-top: 10px;
-      width: 260px;
+    .bar {
+      position: sticky; top: 0; z-index: 99;
+      background: rgba(7,17,30,0.94);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; flex-wrap: wrap;
+      padding: 10px 22px;
+    }
+    .bar-text { font-size: 14px; color: var(--muted); }
+    .bar-btn {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700; font-size: 15px;
+      background: var(--green); color: #fff;
+      padding: 9px 20px; border-radius: 8px;
+      text-decoration: none; white-space: nowrap;
+      transition: opacity .15s;
+    }
+    .bar-btn:hover { opacity: .9; }
+
+    h1, h2, h3 { font-family: 'Syne', sans-serif; color: var(--white); }
+    h1 { font-size: clamp(32px, 6.5vw, 56px); line-height: 1.04; font-weight: 800; letter-spacing: -.025em; }
+    h2 { font-size: clamp(22px, 4vw, 32px); font-weight: 700; line-height: 1.15; margin-bottom: 16px; }
+    h3 { font-size: 19px; font-weight: 700; margin-bottom: 8px; }
+    p  { color: var(--text); margin-bottom: 14px; }
+    p:last-child { margin-bottom: 0; }
+    strong { color: var(--white); }
+
+    .sec { margin-top: 64px; }
+    .mt14 { margin-top: 14px; }
+    .mt20 { margin-top: 20px; }
+    .mt8  { margin-top: 8px; }
+    .mb0  { margin-bottom: 0 !important; }
+    .green { color: var(--green); }
+    .red   { color: var(--red); }
+    .amber { color: var(--amber); }
+    .muted { color: var(--muted); }
+    .dim   { color: var(--dim); }
+    .center { text-align: center; }
+
+    .card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+    }
+    .card-red   { background: #100a0a; border-color: #2d1010; }
+    .card-dark  { background: var(--bg3); border-color: var(--border2); }
+
+    .btn {
       display: block;
-    }
-
-    button {
-      background: #22c55e;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 19px;
+      text-align: center;
+      text-decoration: none;
+      padding: 18px 28px;
+      border-radius: 12px;
       border: none;
       cursor: pointer;
-      color: white;
-      width: auto;
+      transition: transform .15s, box-shadow .15s;
+    }
+    .btn-green {
+      background: var(--green);
+      color: #fff;
+      box-shadow: 0 4px 28px var(--green-glow);
+    }
+    .btn-green:hover { transform: translateY(-2px); box-shadow: 0 8px 36px rgba(34,197,94,.3); }
+    .micro { font-size: 13px; color: var(--dim); text-align: center; margin-top: 11px; }
+
+    ul.check, ul.pain { list-style: none; padding: 0; }
+    ul.check li, ul.pain li {
+      position: relative; padding-left: 28px;
+      margin-bottom: 12px; font-size: 17px; color: var(--text);
+    }
+    ul.check li::before { content: "✓"; color: var(--green); font-weight: 700; position: absolute; left: 0; }
+    ul.pain  li::before { content: "→"; color: var(--red);   font-weight: 700; position: absolute; left: 0; }
+
+    .days { list-style: none; padding: 0; }
+    .days li {
+      display: flex; gap: 16px; align-items: flex-start;
+      padding: 16px 0; border-bottom: 1px solid var(--border);
+      font-size: 16px;
+    }
+    .days li:last-child { border-bottom: none; }
+    .tag {
+      font-family: 'Syne', sans-serif;
+      font-size: 11px; font-weight: 700;
+      color: var(--green);
+      background: rgba(34,197,94,.09);
+      border: 1px solid rgba(34,197,94,.18);
+      border-radius: 6px;
+      padding: 5px 10px;
+      white-space: nowrap;
+      margin-top: 2px;
+      flex-shrink: 0;
     }
 
-    #result {
-      margin-top: 20px;
-      background: #020617;
+    .testi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 520px) { .testi-grid { grid-template-columns: 1fr; } }
+    .testi {
+      background: var(--bg3);
+      border: 1px solid var(--border2);
+      border-radius: 14px;
       padding: 20px;
-      border-radius: 10px;
-      white-space: pre-wrap;
     }
+    .testi p { font-size: 16px; font-style: italic; margin-bottom: 10px; }
+    .testi .who { font-size: 13px; color: var(--dim); font-style: normal; }
+
+    .what-you-get { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+    .get-item {
+      display: flex; align-items: flex-start; gap: 12px;
+      background: var(--bg3); border: 1px solid var(--border2);
+      border-radius: 10px; padding: 14px 16px;
+    }
+    .get-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+    .get-text { font-size: 16px; color: var(--text); line-height: 1.5; }
+    .get-text strong { color: var(--white); }
+
+    .price-block {
+      background: linear-gradient(155deg, #0c1e36 0%, var(--bg) 100%);
+      border: 1px solid var(--border2);
+      border-radius: 20px;
+      padding: 38px 32px;
+      position: relative;
+      overflow: hidden;
+    }
+    .price-block::after {
+      content: '';
+      position: absolute; top: -80px; right: -80px;
+      width: 240px; height: 240px;
+      background: radial-gradient(circle, rgba(34,197,94,.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .price-label { font-size: 13px; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .05em; }
+    .price-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 64px; font-weight: 800;
+      color: var(--white); line-height: 1; margin-bottom: 6px;
+    }
+    .price-context { font-size: 15px; color: var(--muted); margin-bottom: 26px; }
+    .trust {
+      background: rgba(5,46,22,.5);
+      border: 1px solid #166534;
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-top: 16px;
+    }
+    .trust p { font-size: 15px; color: #dcfce7; }
+    .guarantee {
+      display: flex; gap: 14px; align-items: flex-start;
+      background: rgba(15,32,53,.8);
+      border: 1px solid var(--border2);
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin-top: 16px;
+    }
+    .guarantee-icon { font-size: 22px; flex-shrink: 0; }
+    .guarantee-text { font-size: 15px; color: var(--muted); line-height: 1.6; }
+    .guarantee-text strong { color: var(--white); }
+    .urgency-line { font-size: 15px; color: var(--amber); text-align: center; }
+
+    ul.faq { list-style: none; padding: 0; }
+    ul.faq li { padding: 20px 0; border-bottom: 1px solid var(--border); }
+    ul.faq li:last-child { border-bottom: none; padding-bottom: 0; }
+    ul.faq p { font-size: 16px; color: var(--muted); margin-bottom: 0; }
   </style>
 </head>
-
 <body>
 
-<h1>Offerte Generator</h1>
+<nav class="bar">
+  <span class="bar-text">ScrollStop &nbsp;·&nbsp; 7-daags PDF-plan &nbsp;·&nbsp; €9</span>
+<a href="https://buy.stripe.com/test_28E14mgT3bkZ4snd7DcEw00K" class="bar-btn">
+  Start vandaag — €9
+</a></nav>
 
-<input id="klant" placeholder="Klantnaam">
-<input id="bedrijf" placeholder="Bedrijfsnaam">
+<div class="wrap">
 
-<input id="project" placeholder="Type project">
-<input id="sector" placeholder="Sector">
+<!-- ── HERO ── -->
+<section style="padding-top: 64px; padding-bottom: 20px;">
+  <p style="font-size:14px; color:var(--green); letter-spacing:.06em; text-transform:uppercase; font-weight:600; margin-bottom:14px;">7-daags PDF-plan</p>
+  <h1>Stop met zinloos scrollen. Krijg 2 uur per dag terug — in 7 dagen.</h1>
+  <p style="font-size:21px; color:var(--muted); margin-top:20px; margin-bottom:32px; line-height:1.6;">Stop met zinloos scrollen in 7 dagen. 10 minuten per dag. Geen wilskracht, geen apps verwijderen — gewoon de juiste stappen in de juiste volgorde.</p>
 
-<input id="prijs" type="number" placeholder="Prijs €">
-<input id="extra" placeholder="Extra info">
+  <p style="font-size:15px; color:var(--green); font-weight:600; margin-bottom:24px;">De meeste mensen verminderen hun schermtijd met 20–50% binnen 7 dagen.</p>
 
-<select id="stijl">
-  <option value="zakelijk">Zakelijk</option>
-  <option value="warm">Warm</option>
-  <option value="sales">Sales</option>
-</select>
+  <a href="STRIPE_LINK_HERE" class="btn btn-green">Start vandaag — €9, direct toegang</a>
+  <p class="micro">PDF &nbsp;·&nbsp; Direct te downloaden &nbsp;·&nbsp; Eenmalige betaling &nbsp;·&nbsp; Geen abonnement</p>
+</section>
 
-<button onclick="genereer()">Genereer offerte</button>
 
-<div id="result"></div>
+<!-- ── PAIN ── -->
+<section class="sec">
+  <div class="card card-red">
+    <h2 style="margin-bottom:16px;">Herkenbaar?</h2>
+    <ul class="pain">
+      <li>Je opent een app even snel en kijkt 45 minuten later op</li>
+      <li>Je hebt al eerder geprobeerd minder te scrollen — het hield twee dagen vol</li>
+      <li>Je voelt je vaag afgeleid en leeg, bijna elke dag</li>
+      <li>Je weet dat het een probleem is, maar stoppen lukt niet</li>
+    </ul>
+    <p class="amber mb0" style="margin-top:16px;">Dit wordt niet vanzelf beter. Elke week dat je niets doet, wordt de gewoonte automatischer — niet minder.</p>
+  </div>
+</section>
 
-<script>
-async function genereer() {
-  const klant = document.getElementById('klant').value;
-  const bedrijf = document.getElementById('bedrijf').value;
-  const project = document.getElementById('project').value;
-  const sector = document.getElementById('sector').value;
-  const prijs = document.getElementById('prijs').value;
-  const extra = document.getElementById('extra').value;
-  const stijl = document.getElementById('stijl').value;
 
-  if (!project || !sector || !prijs) {
-    alert("Vul alles in");
-    return;
-  }
+<!-- ── SOLUTION ── -->
+<section class="sec">
+  <h2>ScrollStop bestrijdt de gewoonte niet — het ontmantelt hem.</h2>
 
-  document.getElementById('result').innerText = "Genereren...";
+  <div class="card mt20">
+    <p>Wilskracht werkt niet omdat het de gewoonte op het verkeerde niveau aanpakt. De scrollloop draait op de automatische piloot — die reageert niet op inspanning of schuldgevoel.</p>
+    <p>Dit plan werkt op het niveau waar de gewoonte écht zit: <strong>de trigger, de drempel, de reflex en de identiteit</strong>.</p>
+    <p>Zeven dagen. Elke dag één concrete stap. Elke stap richt zich op een andere laag van de loop — zodat er aan het einde niets meer overblijft om op te draaien.</p>
+    <p class="green mb0">De meeste mensen merken al op dag 2 of 3 dat de drang zwakker wordt. Niet omdat hun wilskracht beter is geworden — maar omdat de automatische trigger grip begint te verliezen.</p>
+  </div>
+</section>
 
-  const prompt = `
-Schrijf een professionele offerte.
 
-Klant: ${klant}
-Bedrijf: ${bedrijf}
-Project: ${project}
-Sector: ${sector}
-Prijs: €${prijs}
-Extra: ${extra}
+<!-- ── THE PLAN ── -->
+<section class="sec" id="plan">
+  <h2>Wat je elke dag doet</h2>
+  <div class="card">
+    <ul class="days">
+      <li>
+        <span class="tag">DAG 1</span>
+        <span><strong>Zie het echte getal.</strong> Controleer je werkelijke schermtijd. De meeste mensen zitten er 40–60% naast. De kosten zichtbaar maken is wat de hersenen eindelijk serieus neemt.</span>
+      </li>
+      <li>
+        <span class="tag">DAG 2</span>
+        <span><strong>Vind je trigger.</strong> Verveling, stress, vermoeidheid, uitstellen — je kunt de loop niet onderbreken totdat je weet wat hem start. Deze stap maakt het zichtbaar.</span>
+      </li>
+      <li>
+        <span class="tag">DAG 3</span>
+        <span><strong>Voeg weerstand toe.</strong> Maak het fysiek moeilijker om scroll-apps te openen. De meeste mensen snijden op dag drie al 30–40% van hun schermtijd — zonder wilskracht.</span>
+      </li>
+      <li>
+        <span class="tag">DAG 4</span>
+        <span><strong>Vervang — niet alleen verwijder.</strong> Je hersenen vullen het gat altijd op. Deze dag geeft ze een alternatief dat ze écht accepteren, in plaats van ertegen vechten.</span>
+      </li>
+      <li>
+        <span class="tag">DAG 5</span>
+        <span><strong>Maak één zone schermvrij.</strong> Eén vast moment per dag — geen scrollen, geen uitzonderingen. Klein maar niet onderhandelbaar. Hier begint de focus terug te komen.</span>
+      </li>
+      <li>
+        <span class="tag">DAG 6</span>
+        <span><strong>Analyseer je feed.</strong> Niet alle content heeft hetzelfde effect. Deze stap verwijdert wat leegtrekt en houdt wat er toe doet — zodat de feed stopt met trekken.</span>
+      </li>
+      <li>
+        <span class="tag">DAG 7</span>
+        <span><strong>Vergrendel de verandering.</strong> Het verschil tussen mensen die dit oplossen en mensen die binnen drie weken terugvallen. De meeste plannen slaan deze stap over.</span>
+      </li>
+    </ul>
+  </div>
+</section>
 
-Stijl: ${stijl}
 
-Kort, duidelijk, overtuigend.
-`;
+<!-- ── WHAT YOU GET ── -->
+<section class="sec">
+  <h2>Wat je krijgt</h2>
+  <div class="what-you-get">
+    <div class="get-item">
+      <div class="get-icon">📄</div>
+      <div class="get-text"><strong>Het volledige 7-daagse PDF-plan</strong> — één pagina per dag, gestructureerd en to the point. Werkt op je telefoon, tablet of uitgeprint.</div>
+    </div>
+    <div class="get-item">
+      <div class="get-icon">⚡</div>
+      <div class="get-text"><strong>10–15 minuten per dag</strong> — geen lange routines. Elke dag heeft precies 3 taken en één reflectievraag. Dat is alles.</div>
+    </div>
+    <div class="get-item">
+      <div class="get-icon">🔁</div>
+      <div class="get-text"><strong>Ingebouwde terugval-aanpak</strong> — als je op dag 4 toch scrollt, begin je niet opnieuw. Het plan houdt daar rekening mee en gebruikt het om de volgende stap effectiever te maken.</div>
+    </div>
+    <div class="get-item">
+      <div class="get-icon">🔒</div>
+      <div class="get-text"><strong>Direct toegang</strong> — download de PDF meteen na betaling. Geen account, geen wachten. Start vandaag nog.</div>
+    </div>
+  </div>
+</section>
 
-  try {
-    const res = await fetch('/api/scrolltax', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt })
-    });
 
-    const text = await res.text();
-    document.getElementById('result').innerText = text;
+<!-- ── FREE PREVIEW ── -->
+<section class="sec">
+  <p style="font-size:13px; color:var(--green); letter-spacing:.08em; text-transform:uppercase; font-weight:700; margin-bottom:10px;">Gratis preview</p>
+  <h2 style="margin-bottom:14px;">Lees Dag 1 voordat je iets koopt.</h2>
 
-  } catch (e) {
-    document.getElementById('result').innerText = "Fout bij genereren";
-  }
-}
-</script>
+  <div class="card card-dark" style="text-align:center;">
+    <p style="color:var(--muted); font-size:17px; line-height:1.65; margin-bottom:22px;">Dag 1 van het plan — volledige taken, structuur en format — zodat je de kwaliteit zelf kunt beoordelen voordat je €9 uitgeeft.</p>
 
+    <a href="PREVIEW_PDF_LINK_HERE" class="btn btn-green" style="max-width:440px; margin: 0 auto 12px; font-size:17px; padding:15px 24px;">Lees Dag 1 gratis — geen e-mail nodig</a>
+
+    <p style="font-size:13px; color:var(--dim); margin-bottom:0;">PDF &nbsp;·&nbsp; Direct te openen &nbsp;·&nbsp; Geen aanmelding</p>
+  </div>
+
+  <p style="font-size:16px; color:var(--muted); margin-top:16px; line-height:1.65;">Dag 1 laat je zien hoe groot het probleem echt is. Hoe je het oplost — dat zijn de andere zes dagen.</p>
+</section>
+
+
+<!-- ── WHO IT'S FOR ── -->
+<section class="sec">
+  <h2>Dit is voor jou als</h2>
+  <div class="card">
+    <ul class="check">
+      <li>Je scroll-apps opent zonder dat je het besluit — het gebeurt gewoon</li>
+      <li>Je al eerder hebt geprobeerd minder te scrollen en binnen een week terugviel</li>
+      <li>Je je vaag afgeleid, leeg of licht schuldig voelt op de meeste dagen</li>
+      <li>Je een praktisch plan wilt, geen preek over wilskracht</li>
+      <li>Je student bent en klaar bent met uren kwijtraken aan de feed</li>
+      <li>Je dit écht wilt oplossen in plaats van plannen het ooit te doen</li>
+    </ul>
+  </div>
+</section>
+
+
+<!-- ── SOCIAL PROOF ── -->
+<section class="sec">
+  <h2>Wat vroege gebruikers merkten</h2>
+  <div class="testi-grid">
+    <div class="testi">
+      <p>"Ik ging van apps openen elke 20 minuten naar zelf kiezen wanneer ik ze gebruik. Dat voelde onmogelijk hiervoor."</p>
+      <span class="who">— Lena, 22, student</span>
+    </div>
+    <div class="testi">
+      <p>"Dag 5 kwam hard aan. Ik had niet door hoeveel ik echt verloor totdat ik het getal opschreef."</p>
+      <span class="who">— Jasper, 19, eerstejaars</span>
+    </div>
+    <div class="testi">
+      <p>"Geen schuldgevoel, geen regels, geen gezeur. Gewoon praktische stappen die de drang elke dag zwakker maakten."</p>
+      <span class="who">— Sara, 24, werkstudent</span>
+    </div>
+    <div class="testi">
+      <p>"Ik verwachtte op dag 3 al te stoppen zoals altijd. Dat gebeurde niet. De triggerstap was de enige die echt werkte."</p>
+      <span class="who">— Thomas, 21, student</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── PRICE / BUY ── -->
+<section class="sec">
+  <div class="price-block">
+    <h2 style="margin-bottom:8px;">Haal het ScrollStop-plan</h2>
+    <p class="muted" style="margin-bottom:24px;">7 dagen. Eén stap per dag. Doorbreekt de loop — zonder wilskracht, extreme regels of apps verwijderen.</p>
+
+    <p class="price-label">Eenmalige betaling. Voor altijd van jou.</p>
+    <div class="price-num">€9</div>
+    <p class="price-context">Minder dan een koffie. Minder dan 30 minuten van de tijd die je op dag één al terugwint.</p>
+
+    <p style="font-size:15px; color:var(--green); font-weight:600; margin-bottom:24px;">De meeste mensen verminderen hun schermtijd met 20–50% binnen 7 dagen.</p>
+
+  <a href="STRIPE_LINK_HERE" class="btn btn-green">Start vandaag — €9, direct toegang</a>
+    <p class="micro">PDF &nbsp;·&nbsp; Direct te downloaden &nbsp;·&nbsp; Geen abonnement &nbsp;·&nbsp; Werkt op elk apparaat</p>
+
+    <div class="trust mt14">
+      <p><strong>Wat je krijgt:</strong> Het volledige 7-daagse plan als PDF. Direct te downloaden na betaling. Geen upsell. Geen drip-feed. Geen account nodig. Open het en begin vandaag.</p>
+    </div>
+
+    <div class="guarantee">
+      <div class="guarantee-icon">🔒</div>
+      <div class="guarantee-text">
+        <strong>Geen risico.</strong> Als je het 7-daagse plan doorloopt en geen verschil merkt, neem dan contact op. Dit is een product van €9 — je vertrouwen is het niet waard als het niet werkt.
+      </div>
+    </div>
+
+    <p class="urgency-line mt14">Elke dag dat je dit niet aanpakt, wordt de gewoonte automatischer. Gewoontes worden niet minder — ze versterken.</p>
+    <p class="dim center mt8">Digitale PDF &nbsp;·&nbsp; Eenmalige betaling &nbsp;·&nbsp; Geen fysieke verzending</p>
+  </div>
+</section>
+
+
+<!-- ── FAQ ── -->
+<section class="sec">
+  <h2>Vragen vooraf</h2>
+  <div class="card">
+    <ul class="faq">
+
+      <li>
+        <h3>Ik heb al eerder geprobeerd minder te scrollen. Waarom zou dit anders zijn?</h3>
+        <p>Omdat pogingen op basis van wilskracht altijd mislukken — en dit plan gebruikt geen wilskracht. Het richt zich op drempel, trigger en vervanging: de drie lagen waar de gewoonte écht zit. Andere aanpak, niet alleen andere verpakking.</p>
+      </li>
+
+      <li>
+        <h3>Moet ik apps verwijderen of er volledig mee stoppen?</h3>
+        <p>Nee. Het doel is controle, niet eliminatie. De meeste mensen die dit plan doorlopen houden alle dezelfde apps — maar zonder de compulsieve loop die de dienst uitmaakt.</p>
+      </li>
+
+      <li>
+        <h3>Hoelang duurt elke dag?</h3>
+        <p>10 tot 15 minuten. Soms minder. Het hele punt is om wrijving uit je leven te halen — niet er een nieuwe veeleisende routine bovenop te stapelen.</p>
+      </li>
+
+      <li>
+        <h3>Wat als ik op dag 4 toch scroll?</h3>
+        <p>Verwacht. Ingebouwd in het plan. Je begint niet opnieuw — je gaat verder. Een terugval wist geen vooruitgang. Het is informatie over je trigger, waardoor het plan effectiever wordt.</p>
+      </li>
+
+      <li>
+        <h3>Wat krijg ik precies?</h3>
+        <p>Een PDF. Je downloadt hem direct na betaling. 9 pagina's — één intropagina, 7 dagpagina's, één slotpagina. Werkt op telefoon, tablet of uitgeprint. Geen account, geen app, geen inloggen.</p>
+      </li>
+
+      <li>
+        <h3>€9 lijkt bijna te goedkoop. Zit er een upsell achter?</h3>
+        <p>Nee. €9 is de prijs. Volledig plan inbegrepen. Er is geen premiumversie, geen abonnement, geen upsell achter de checkout. Eén betaling, alles erin.</p>
+      </li>
+
+    </ul>
+  </div>
+</section>
+
+
+<!-- ── FINAL CTA ── -->
+<section style="margin-top: 64px; padding-bottom: 80px; text-align: center;">
+
+  <h2 style="margin-bottom: 14px;">Twee opties vanaf hier.</h2>
+
+  <div class="card card-dark" style="text-align:left; margin-bottom: 28px;">
+    <p><span class="red">Optie 1:</span> Sluit dit tabblad, open een scroll-app, voel je vaag schuldig, zeg dat je het later regelt. De loop gaat door. Weer een week weg.</p>
+    <p class="mb0"><span class="green">Optie 2:</span> Geef €9 uit, start het plan vandaag. Zeven dagen later is de loop zwakker. De automatische drang heeft minder grip. Je hebt je tijd terug.</p>
+  </div>
+
+  <a href="STRIPE_LINK_HERE" class="btn btn-green" style="max-width: 480px; margin: 0 auto; display: block;">Start vandaag — €9</a>
+  <p class="micro">Eenmalige betaling &nbsp;·&nbsp; Direct te downloaden &nbsp;·&nbsp; Begin binnen 5 minuten</p>
+
+</section>
+
+</div>
 </body>
 </html>
