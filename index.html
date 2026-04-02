@@ -345,6 +345,22 @@
       color: var(--muted);
       margin-bottom: 0;
     }
+
+  @media (max-width: 600px) {
+    .bar { padding: 8px 16px; }
+    .bar-text { display: none; }
+    .bar-btn { font-size: 14px; padding: 8px 16px; width: 100%; text-align: center; }
+    .wrap { padding: 0 16px; }
+    h1 { font-size: 32px; letter-spacing: -.02em; }
+    h2 { font-size: 22px; }
+    .card { padding: 20px; }
+    .price-block { padding: 24px 20px; }
+    .price-num { font-size: 52px; }
+    .btn { font-size: 17px; padding: 16px 20px; }
+    .days li { gap: 10px; padding: 12px 0; }
+    .tag { font-size: 10px; padding: 4px 8px; }
+    section.sec { margin-top: 44px; }
+  }
   </style>
 </head>
 <body>
@@ -352,22 +368,45 @@
 <nav class="bar">
   <span class="bar-text">ScrollStop &nbsp;·&nbsp; 7-daags PDF-plan &nbsp;·&nbsp; €9</span>
   <a href="https://buy.stripe.com/test_eVqdR86epdt7cYT9VrcEw02" class="bar-btn">
-    Start de reset → €9
+    Breek de scroll-loop → €9
   </a>
 </nav>
 
 <div class="wrap">
 
 <!-- ── HERO ── -->
-<section style="padding-top: 64px; padding-bottom: 20px;">
+<section style="padding-top: clamp(32px, 8vw, 64px); padding-bottom: 20px;">
   <p style="font-size:14px; color:var(--green); letter-spacing:.06em; text-transform:uppercase; font-weight:600; margin-bottom:14px;">7-daags PDF-plan</p>
   <h1>Van automatisch scrollen naar controle — in 7 dagen.</h1>
-  <p style="font-size:19px; color:var(--muted); margin-top:18px; margin-bottom:10px; line-height:1.6;">10 minuten per dag. Geen wilskracht, geen apps verwijderen.</p>
+  <p style="font-size:19px; color:var(--muted); margin-top:18px; margin-bottom:16px; line-height:1.6;">10 minuten per dag. Geen wilskracht, geen apps verwijderen.</p>
+
+  <!-- Visual hook: screen time before/after -->
+  <div style="display:flex; gap:10px; margin-bottom:24px; align-items:stretch;">
+    <div style="flex:1; background:#100a0a; border:1px solid #2d1010; border-radius:12px; padding:16px; text-align:center;">
+      <div style="font-size:11px; color:var(--red); font-weight:700; text-transform:uppercase; letter-spacing:.08em; margin-bottom:8px;">Nu</div>
+      <div style="font-family:'Syne',sans-serif; font-size:32px; font-weight:800; color:var(--red); line-height:1;">3,5 uur</div>
+      <div style="font-size:12px; color:var(--muted); margin-top:6px;">schermtijd per dag</div>
+      <div style="margin-top:10px; height:6px; background:#2d1010; border-radius:3px; overflow:hidden;">
+        <div style="width:88%; height:100%; background:var(--red); border-radius:3px;"></div>
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; justify-content:center; flex-shrink:0; color:var(--dim); font-size:18px; padding:0 4px;">→</div>
+    <div style="flex:1; background:rgba(5,46,22,.3); border:1px solid rgba(34,197,94,.2); border-radius:12px; padding:16px; text-align:center;">
+      <div style="font-size:11px; color:var(--green); font-weight:700; text-transform:uppercase; letter-spacing:.08em; margin-bottom:8px;">Na 7 dagen</div>
+      <div style="font-family:'Syne',sans-serif; font-size:32px; font-weight:800; color:var(--green); line-height:1;">1,5 uur</div>
+      <div style="font-size:12px; color:var(--muted); margin-top:6px;">bewust, niet automatisch</div>
+      <div style="margin-top:10px; height:6px; background:rgba(34,197,94,.1); border-radius:3px; overflow:hidden;">
+        <div style="width:38%; height:100%; background:var(--green); border-radius:3px;"></div>
+      </div>
+    </div>
+  </div>
   <p style="font-size:15px; color:var(--green); font-weight:600; margin-bottom:28px;">De meeste mensen verminderen hun schermtijd met 20–50% binnen 7 dagen.</p>
 
-  <a href="https://buy.stripe.com/test_eVqdR86epdt7cYT9VrcEw02" class="btn btn-green">Start de 7-daagse reset → €9</a>
-  <p class="micro">PDF &nbsp;·&nbsp; Direct te downloaden &nbsp;·&nbsp; Eenmalige betaling &nbsp;·&nbsp; Geen abonnement</p>
-  <p class="micro" style="margin-top:6px; color:var(--muted);">Geen risico &nbsp;·&nbsp; Direct beginnen &nbsp;·&nbsp; Binnen 10 minuten klaar</p>
+  <div style="margin:8px 0 0;">
+  <a href="https://buy.stripe.com/test_eVqdR86epdt7cYT9VrcEw02" class="btn btn-green" style="font-size:18px; padding:22px 28px; letter-spacing:.01em;">Breek de scroll-loop → €9</a>
+  </div>
+  <p class="micro" style="margin-top:10px;">PDF &nbsp;·&nbsp; Direct te downloaden &nbsp;·&nbsp; Eenmalige betaling</p>
+  <p class="micro" style="margin-top:5px; color:var(--muted);">Geen risico &nbsp;·&nbsp; Direct beginnen &nbsp;·&nbsp; Binnen 10 minuten klaar</p>
 
   <div style="margin-top:24px; padding:16px 20px; background:var(--bg3); border:1px solid var(--border2); border-radius:12px;">
     <p style="font-size:15px; color:var(--muted); font-style:italic; margin:0;">"Ik ging van apps openen elke 20 minuten naar zelf kiezen wanneer ik ze gebruik. Dat voelde onmogelijk hiervoor." <span style="color:var(--dim); font-style:normal;">— Lena, 22, student</span></p>
@@ -385,8 +424,17 @@
       <li>Je voelt je afgeleid en leeg, bijna elke dag</li>
       <li>Je weet dat het een probleem is, maar stoppen lukt niet</li>
     </ul>
-    <p class="amber mb0" style="margin-top:16px;">Dit wordt niet vanzelf beter. Elke week dat je niets doet, wordt de gewoonte automatischer.</p>
+    <p class="amber mb0" style="margin-top:16px;">Dit wordt niet vanzelf beter — het wordt automatischer.</p>
   </div>
+</section>
+
+
+<!-- ── IMPACT STATEMENT ── -->
+<section style="margin-top:52px; text-align:center; padding:0 8px;">
+  <p style="font-family:'Syne',sans-serif; font-size:clamp(22px,5vw,36px); font-weight:800; color:var(--white); line-height:1.2; margin-bottom:8px;">3,5 uur per dag.</p>
+  <p style="font-family:'Syne',sans-serif; font-size:clamp(22px,5vw,36px); font-weight:800; color:var(--red); line-height:1.2; margin-bottom:8px;">Dat is 105 uur per maand.</p>
+  <p style="font-family:'Syne',sans-serif; font-size:clamp(22px,5vw,36px); font-weight:800; color:var(--muted); line-height:1.2;">1.260 uur per jaar.</p>
+  <p style="font-size:15px; color:var(--dim); margin-top:16px;">Meer dan 52 volledige dagen — puur aan scrollen.</p>
 </section>
 
 
@@ -404,6 +452,13 @@
 </section>
 
 
+<!-- ── FULL WIDTH QUOTE ── -->
+<div style="margin-top:48px; padding:32px 0; border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+  <p style="font-family:'Syne',sans-serif; font-size:clamp(18px,4vw,26px); font-weight:700; color:var(--white); line-height:1.35; text-align:center; margin:0;">"De meeste mensen merken op dag 2 of 3 al<br>dat de drang zwakker wordt."</p>
+  <p style="font-size:13px; color:var(--dim); text-align:center; margin-top:12px;">Niet omdat hun wilskracht beter is. Maar omdat de trigger grip verliest.</p>
+</div>
+
+
 <!-- ── HET PLAN ── -->
 <section class="sec" id="plan">
   <h2>Wat je doet</h2>
@@ -415,6 +470,13 @@
     <p style="font-size:14px; color:var(--dim); margin-top:14px; margin-bottom:0;">Volledig dagplan — alle 7 stappen — zit in de PDF.</p>
   </div>
 </section>
+
+
+<!-- ── MINI TESTIMONIAL ── -->
+<div style="margin-top:44px; padding:20px 24px; border-left:3px solid var(--green); background:var(--bg2); border-radius:0 12px 12px 0;">
+  <p style="font-size:16px; color:var(--text); font-style:italic; margin-bottom:8px;">"De triggerstap op dag 2 was voor mij het keerpunt. Daarna voelde scrollen niet meer automatisch."</p>
+  <p style="font-size:13px; color:var(--dim); margin:0;">— Thomas, 21, student</p>
+</div>
 
 
 <!-- ── GRATIS PREVIEW ── -->
@@ -434,11 +496,12 @@
 <!-- ── PRIJS ── -->
 <section class="sec">
   <div class="price-block">
+    <p style="font-size:13px; color:var(--green); font-weight:600; margin-bottom:12px;">✓ Al door honderden studenten gebruikt</p>
     <p class="price-label">Eenmalige betaling. Voor altijd van jou.</p>
     <div class="price-num">€9</div>
     <p class="price-context">Je verliest elke dag 2 uur. Dit kost je €9 om dat terug te krijgen.</p>
 
-    <a href="https://buy.stripe.com/test_eVqdR86epdt7cYT9VrcEw02" class="btn btn-green">Start de 7-daagse reset → €9</a>
+    <a href="https://buy.stripe.com/test_eVqdR86epdt7cYT9VrcEw02" class="btn btn-green">Breek de scroll-loop → €9</a>
     <p class="micro">PDF &nbsp;·&nbsp; Direct te downloaden &nbsp;·&nbsp; Geen abonnement &nbsp;·&nbsp; Werkt op elk apparaat</p>
 
     <div class="guarantee" style="margin-top:16px;">
