@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scroll Tax Calculator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen flex items-center justify-center p-4">
+  <div class="bg-gray-800 p-8 rounded-2xl max-w-md w-full shadow-2xl">
+    <h1 class="text-3xl font-bold mb-2">Scroll Tax Calculator</h1>
+    <p class="text-gray-400 mb-6">Hoeveel kost doomscrollen jou echt?</p>
+    <label class="block mb-2 text-sm font-medium">Uren per dag op social media:</label>
+    <input id="hours" type="number" min="0.5" max="24" step="0.5" value="3" 
+           class="w-full p-3 rounded-lg bg-gray-700 mb-4 text-white focus:ring-2 focus:ring-red-500 outline-none">
+    <label class="block mb-2 text-sm font-medium">Je uurtarief:</label>
+    <div class="flex gap-2 mb-6">
+      <select id="currency" class="p-3 rounded-lg bg-gray-700 text-white focus:ring-2 focus:ring-red-500 outline-none">
+        <option value="EUR">€ EUR</option>
+        <option value="USD">$ USD</option>
+      </select>
+      <input id="rate" type="number" min="1" value="15" 
+             class="flex-1 p-3 rounded-lg bg-gray-700 text-white focus:ring-2 focus:ring-red-500 outline-none">
+    </div>
+        <button onclick="calculate()" id="btn"
+            class="w-full bg-red-600 hover:bg-red-700 disabled:bg-gray-600 p-4 rounded-lg font-bold text-lg transition">
+      Bereken mijn Scroll Tax
+    </button>
+    <div id="result" class="mt-6 p-4 bg-gray-700 rounded-lg hidden whitespace-pre-wrap"></div>
+    <div id="error" class="mt-6 p-4 bg-red-900/50 border border-red-700 rounded-lg hidden text-red-200"></div>
+  </div>
+  <script>
+    async function calculate() {
+      const hours = document.getElementById('hours').value;
+      const rate = document.getElementById('rate').value;
+      const currency = document.getElementById('currency').value;
+      const resultDiv = document.getElementById('result');
+      const errorDiv = document.getElementById('error');
+      const btn = document.getElementById('btn');
+      resultDiv.classList.add('hidden');
+      errorDiv.classList.add('hidden');
+      btn.disabled = true;
+      btn.textContent = 'Berekenen...';
+            try {
+        const res = await fetch('/api/scrolltax', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            hours: parseFloat(hours), 
+            rate: parseFloat(rate), 
+            currency 
+          })
+        });
+        const data = await res.json();
+        if (data.error) {
+          errorDiv.textContent = data.error;
+          errorDiv.classList.remove('hidden');
+        } else {
+          resultDiv.textContent = data.result;
+          resultDiv.classList.remove('hidden');
+        }
+      } catch (e) {
+        errorDiv.textContent = 'Server niet bereikbaar. Check je instellingen.';
+        errorDiv.classList.remove('hidden');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Bereken mijn Scroll Tax';
+      }
+    }
+  </script>
+</body>
+</html>
