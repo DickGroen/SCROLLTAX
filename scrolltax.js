@@ -3,7 +3,7 @@ export async function onRequestPost(context) {
 
   // CORS headers - PAS DIT AAN NAAR JE ECHTE DOMEIN
   const corsHeaders = {
-    'Access-Control-Allow-Origin': 'https://scrollstop.nl',
+    'Access-Control-Allow-Origin': 'https://scrollreset.nl',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Content-Type': 'application/json'
