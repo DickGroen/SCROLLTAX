@@ -1,7 +1,9 @@
 export async function onRequestPost(context) {
   try {
     const { request, env } = context;
-    const body = await request.json();
+  const body = await request.json();
+const uren = parseFloat(String(body.uren).replace(',', '.'));
+const uurloon = parseFloat(String(body.uurloon).replace(',', '.'));
     const hours = body.hours || 0;
     const rate = body.rate || 15;
     const currency = body.currency || 'EUR';
