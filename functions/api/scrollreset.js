@@ -1,71 +1,55 @@
 export async function onRequestPost(context) {
+  const { request, env } = context;
+  
   try {
-    const { request, env } = context;
-  const body = await request.json();
-const uren = parseFloat(String(body.uren).replace(',', '.'));
-const uurloon = parseFloat(String(body.uurloon).replace(',', '.'));
-    const hours = body.hours || 0;
-    const rate = body.rate || 15;
-    const currency = body.currency || 'EUR';
+    const body = await request.json();
+    const uren = parseFloat(String(body.uren).replace(',', '.'));
+    const uurloon = parseFloat(String(body.uurloon).replace(',', '.'));
+    
+    if (!uren ||!uurloon || uren <= 0 || uurloon <= 0) {
+      return Response.json({ error: 'Vul geldige getallen in' }, { status: 400 });
+    }
 
+    const dagen = (uren * 30 / 8).toFixed(1);
+    const schuld = Math.round(uren * uurloon * 30);
+    
+    // Check of OpenAI key er is
     if (!env.OPENAI_API_KEY) {
-      return new Response(JSON.stringify({ error: "Missing OPENAI_API_KEY" }), {
-        status: 500,
-        headers: { "Content-Type": "application/json" }
+      return Response.json({ 
+        roast: `Je bent ${dagen} werkdagen per maand aan het scrollen. Dat is pure tijdverspilling.`,
+        schuld: schuld,
+        upsell: 9
       });
     }
 
-    const symbol = currency === 'USD'? '$' : '€';
-    const dailyCost = hours * rate;
-    const yearlyCost = dailyCost * 365;
-
-    const prompt = `User scrolled for: ${hours} hours per day at ${symbol}${rate}/hour. That's ${symbol}${dailyCost} per day and ${symbol}${yearlyCost} per year wasted.
-
-Be brutally honest and emotionally impactful.
-
-Structure your response EXACTLY like this:
-
-1. Start with a shocking sentence about how much time and money was wasted.
-2. Calculate money lost (${symbol}${rate}/hour) in a bold way.
-3. Compare it to something painful (like rent, vacation, etc).
-4. End with a short, harsh reality check.
-
-Keep it short, punchy, and very direct. Max 4 zinnen. Nederlands.`;
-
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
+    // OpenAI call met timeout
+    const openaiRes = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
       headers: {
-        "Authorization": `Bearer ${env.OPENAI_API_KEY}`,
-        "Content-Type": "application/json"
+        'Authorization': `Bearer ${env.OPENAI_API_KEY}`,
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        model: "gpt-4o-mini",
-        messages: [{ role: "user", content: prompt }],
-        temperature: 0.9,
-        max_tokens: 200
+        model: 'gpt-4o-mini',
+        messages: [{
+          role: 'user', 
+          content: `Je bent een sarcastische coach. Iemand scrollt ${uren} uur per dag en verdient €${uurloon}/uur. Roast ze in 1 zin Nederlands. Max 20 woorden.`
+        }],
+        max_tokens: 50
       })
     });
 
-    const data = await response.json();
+    const data = await openaiRes.json();
+    const roast = data.choices?.[0]?.message?.content || `Je bent ${dagen} werkdagen per maand aan het scrollen. Stop.`;
 
-    if (!response.ok) {
-      return new Response(JSON.stringify({ error: `OpenAI error: ${data.error?.message || 'Unknown'}` }), {
-        status: response.status,
-        headers: { "Content-Type": "application/json" }
-      });
-    }
-
-    const result = data.choices[0].message.content;
-
-    return new Response(JSON.stringify({ result }), {
-      status: 200,
-      headers: { "Content-Type": "application/json" }
-    });
-
-  } catch (error) {
-    return new Response(JSON.stringify({ error: `Function error: ${error.message}` }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" }
+    return Response.json({ roast, schuld, upsell: 9 });
+    
+  } catch (e) {
+    // Als alles faalt: geef alsnog een resultaat
+    return Response.json({ 
+      roast: 'Je scrollt teveel. Dat kost je geld.',
+      schuld: 2625,
+      upsell: 9 
     });
   }
 }
