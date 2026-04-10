@@ -42,7 +42,7 @@ export async function onRequestPost(context) {
     const data = await openaiRes.json();
     const roast = data.choices?.[0]?.message?.content || `Je bent ${dagen} werkdagen per maand aan het scrollen. Stop.`;
 
-    return Response.json({ roast, schuld, upsell: 9 });
+   return Response.json({ roast: resultaat, schuld: schuldPerMaand, upsell: 9 });
     
   } catch (e) {
     // Als alles faalt: geef alsnog een resultaat
