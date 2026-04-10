@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scroll-Schuld Calculator - Gratis Tool</title>
+<style>
+:root{--bg:#07111e;--bg2:#0b1929;--border:#162840;--text:#eaf1f8;--muted:#96b0c8;--dim:#6a8ba8;--green:#22c55e;--red:#f87171;--white:#ffffff}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);font-size:18px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:600px;margin:40px auto;padding:0 20px}
+h1{font-size:clamp(28px,6vw,36px);font-weight:800;margin-bottom:8px;color:var(--white)}
+.sub{color:var(--muted);margin-bottom:32px;font-size:17px}
+  label{display:block;font-size:15px;color:var(--muted);margin-bottom:6px;margin-top:16px}
+input{width:100%;padding:14px 16px;background:var(--bg2);border:1px solid var(--border);color:var(--white);border-radius:10px;font-size:17px}
+input:focus{outline:none;border-color:var(--green)}
+button{background:var(--green);color:#fff;padding:18px;border:none;border-radius:12px;font-size:19px;font-weight:800;width:100%;cursor:pointer;margin-top:24px;transition:transform .15s}
+button:hover{transform:translateY(-2px)}
+button:disabled{opacity:.6;cursor:not-allowed}
+#result{display:none;margin-top:32px;padding:24px;background:var(--bg2);border:1px solid var(--border);border-radius:16px}
+#result h2{font-size:22px;margin-bottom:12px;color:var(--white)}
+#roast{font-size:17px;margin:16px 0;line-height:1.65}
+#schuld{font-size:28px;font-weight:800;color:var(--red);margin:20px 0}
+.cta-btn{display:block;background:var(--green);color:#fff;padding:20px 24px;text-align:center;border-radius:12px;font-size:19px;font-weight:800;text-decoration:none;margin-top:24px;transition:transform .15s,box-shadow .15s;box-shadow:0 4px 28px rgba(34,197,94,.18)}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 8px 36px rgba(34,197,94,.3)}
+.muted{font-size:13px;color:var(--dim);text-align:center;margin-top:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Bereken je Scroll-Schuld</h1>
+<p class="sub">Ontdek in 10 sec hoeveel geld je weggooit aan TikTok, Reels en doomscrollen.</p>
+<label>Uren per dag op je telefoon:</label>
+<input id="uren" type="number" placeholder="3.5" step="0.1" min="0">
+<label>Je uurloon / wat je tijd waard is €:</label>
+<input id="uurloon" type="number" placeholder="25" step="1" min="1">
+<button id="calcBtn" onclick="bereken()">Bereken mijn schade →</button>
+<div id="result">
+<h2>Je resultaat:</h2>
+<p id="roast"></p>
+<p id="schuld"></p>
+<a id="cta" href="#" class="cta-btn">Stop hiermee in 7 dagen → €9</a>
+<p class="muted">PDF · Direct download · Eenmalig €9 · Geen abonnement</p>
+</div>
+<script>
+async function bereken(){
+const uren=document.getElementById('uren').value;
+const uurloon=document.getElementById('uurloon').value;
+const btn=document.getElementById('calcBtn');
+if(!uren||!uurloon||uren<=0||uurloon<=0){return alert('Vul beide velden correct in')}
+btn.innerText='Berekenen...';btn.disabled=true;
+try{
+const res=await fetch('/api/scrollreset',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({uren,uurloon})});
+if(!res.ok)throw new Error('API error');
+const data=await res.json();
+document.getElementById('roast').innerText=data.roast;
+document.getElementById('schuld').innerText=`Jouw scroll-schuld: €${data.amount} per maand`;
+const trackingId='tool_'+Date.now();
+document.getElementById('cta').href=data.payment_url+'?client_reference_id='+trackingId;
+document.getElementById('result').style.display='block';
+document.getElementById('result').scrollIntoView({behavior:'smooth'});
+}catch(e){alert('Er ging iets mis. Probeer opnieuw.');console.error(e)}
+finally{btn.innerText='Bereken mijn schade →';btn.disabled=false}
+}
+</script>
+</body>
+</html>
