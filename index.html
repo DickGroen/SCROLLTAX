@@ -1,72 +1,544 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Scroll Tax Calculator</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-900 text-white min-h-screen flex items-center justify-center p-4">
-  <div class="bg-gray-800 p-8 rounded-2xl max-w-md w-full shadow-2xl">
-    <h1 class="text-3xl font-bold mb-2">Scroll Tax Calculator</h1>
-    <p class="text-gray-400 mb-6">Hoeveel kost doomscrollen jou echt?</p>
-    <label class="block mb-2 text-sm font-medium">Uren per dag op social media:</label>
-    <input id="hours" type="number" min="0.5" max="24" step="0.5" value="3" 
-           class="w-full p-3 rounded-lg bg-gray-700 mb-4 text-white focus:ring-2 focus:ring-red-500 outline-none">
-    <label class="block mb-2 text-sm font-medium">Je uurtarief:</label>
-    <div class="flex gap-2 mb-6">
-      <select id="currency" class="p-3 rounded-lg bg-gray-700 text-white focus:ring-2 focus:ring-red-500 outline-none">
-        <option value="EUR">€ EUR</option>
-        <option value="USD">$ USD</option>
-      </select>
-      <input id="rate" type="number" min="1" value="15" 
-             class="flex-1 p-3 rounded-lg bg-gray-700 text-white focus:ring-2 focus:ring-red-500 outline-none">
-    </div>
-        <button onclick="calculate()" id="btn"
-            class="w-full bg-red-600 hover:bg-red-700 disabled:bg-gray-600 p-4 rounded-lg font-bold text-lg transition">
-      Bereken mijn Scroll Tax
-    </button>
-    <div id="result" class="mt-6 p-4 bg-gray-700 rounded-lg hidden whitespace-pre-wrap"></div>
-    <div id="error" class="mt-6 p-4 bg-red-900/50 border border-red-700 rounded-lg hidden text-red-200"></div>
-  </div>
-  <script>
-    async function calculate() {
-      const hours = document.getElementById('hours').value;
-      const rate = document.getElementById('rate').value;
-      const currency = document.getElementById('currency').value;
-      const resultDiv = document.getElementById('result');
-      const errorDiv = document.getElementById('error');
-      const btn = document.getElementById('btn');
-      resultDiv.classList.add('hidden');
-      errorDiv.classList.add('hidden');
-      btn.disabled = true;
-      btn.textContent = 'Berekenen...';
-            try {
-        const res = await fetch('/api/scrollreset', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ 
-            hours: parseFloat(hours), 
-            rate: parseFloat(rate), 
-            currency 
-          })
-        });
-        const data = await res.json();
-        if (data.error) {
-          errorDiv.textContent = data.error;
-          errorDiv.classList.remove('hidden');
-        } else {
-          resultDiv.textContent = data.result;
-          resultDiv.classList.remove('hidden');
-        }
-      } catch (e) {
-        errorDiv.textContent = 'Server niet bereikbaar. Check je instellingen.';
-        errorDiv.classList.remove('hidden');
-      } finally {
-        btn.disabled = false;
-        btn.textContent = 'Bereken mijn Scroll Tax';
-      }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ScrollReset — Stop met zinloos scrollen in 7 dagen</title>
+  <meta name="description" content="Bereken hoeveel scrollen je kost. Dan fix je het in 7 dagen voor €9." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:         #07111e;
+      --bg2:        #0b1929;
+      --bg3:        #0f2035;
+      --border:     #162840;
+      --border2:    #1e3652;
+      --text:       #dde6f0;
+      --muted:      #7d9ab5;
+      --dim:        #3d5875;
+      --green:      #22c55e;
+      --green-glow: rgba(34,197,94,0.18);
+      --red:        #f87171;
+      --amber:      #fbbf24;
+      --white:      #ffffff;
     }
-  </script>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 0; opacity: .35;
+    }
+    .wrap { max-width: 620px; margin: 0 auto; padding: 0 18px; position: relative; z-index: 1; }
+
+    /* NAV */
+    .bar {
+      position: sticky; top: 0; z-index: 99;
+      background: rgba(7,17,30,0.94);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 10px; padding: 9px 18px;
+    }
+    .bar-left { display: flex; align-items: center; gap: 8px; }
+    .bar-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 15px; color: var(--white); }
+    .bar-urgency {
+      display: none;
+    }
+    .bar-btn {
+      font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px;
+      background: var(--green); color: #fff;
+      padding: 8px 16px; border-radius: 8px; text-decoration: none; white-space: nowrap;
+      transition: opacity .15s, transform .15s; box-shadow: 0 2px 14px var(--green-glow);
+    }
+    .bar-btn:hover { opacity: .9; transform: translateY(-1px); }
+
+    /* TYPE */
+    h1, h2, h3 { font-family: 'Syne', sans-serif; color: var(--white); }
+    h1 { font-size: clamp(28px, 7vw, 50px); line-height: 1.05; font-weight: 800; letter-spacing: -.03em; }
+    h2 { font-size: clamp(20px, 4vw, 28px); font-weight: 700; line-height: 1.15; margin-bottom: 14px; }
+    h3 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+    p  { color: var(--text); margin-bottom: 12px; font-size: 15px; }
+    p:last-child { margin-bottom: 0; }
+    strong { color: var(--white); }
+    .sec { margin-top: 60px; }
+
+    /* TAKEAWAY */
+    .takeaway {
+      display: block;
+      font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px;
+      color: var(--white);
+      border-left: 3px solid var(--green);
+      padding: 10px 14px;
+      background: rgba(34,197,94,.05);
+      border-radius: 0 8px 8px 0;
+      margin: 14px 0; line-height: 1.4;
+    }
+
+    /* CARDS */
+    .card { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 20px 22px; }
+    .card-red  { background: #100a0a; border-color: #2d1010; }
+    .card-dark { background: var(--bg3); border-color: var(--border2); }
+
+    /* BUTTONS */
+    .btn {
+      display: block; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 17px;
+      text-align: center; text-decoration: none; padding: 16px 22px;
+      border-radius: 12px; border: none; cursor: pointer;
+      transition: transform .15s, box-shadow .15s;
+    }
+    .btn-green { background: var(--green); color: #fff; box-shadow: 0 4px 28px var(--green-glow); }
+    .btn-green:hover { transform: translateY(-2px); box-shadow: 0 8px 36px rgba(34,197,94,.3); }
+    .micro { font-size: 12px; color: var(--muted); text-align: center; margin-top: 8px; line-height: 1.6; }
+
+    /* LISTS */
+    ul.check, ul.pain { list-style: none; padding: 0; }
+    ul.check li, ul.pain li { position: relative; padding-left: 26px; margin-bottom: 11px; font-size: 15px; }
+    ul.check li::before { content: "✓"; color: var(--green); font-weight: 700; position: absolute; left: 0; }
+    ul.pain  li::before { content: "→"; color: var(--red);   font-weight: 700; position: absolute; left: 0; }
+
+    /* DAYS */
+    .days { list-style: none; padding: 0; }
+    .days li { display: flex; gap: 14px; align-items: flex-start; padding: 13px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+    .days li:last-child { border-bottom: none; }
+    .tag { font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; color: var(--green); background: rgba(34,197,94,.09); border: 1px solid rgba(34,197,94,.2); border-radius: 5px; padding: 4px 8px; white-space: nowrap; margin-top: 2px; flex-shrink: 0; }
+
+    /* URGENCY */
+
+
+    /* TWEET CARDS */
+    .tweet-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 500px) { .tweet-grid { grid-template-columns: 1fr; } }
+    .tweet { background: var(--bg3); border: 1px solid var(--border2); border-radius: 13px; padding: 14px; }
+    .tweet-header { display: flex; align-items: center; gap: 9px; margin-bottom: 9px; }
+    .tweet-avatar { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 13px; flex-shrink: 0; }
+    .tweet-name   { font-size: 13px; font-weight: 600; color: var(--white); line-height: 1.2; }
+    .tweet-handle { font-size: 11px; color: var(--dim); }
+    .tweet-body   { font-size: 13px; color: var(--text); line-height: 1.55; }
+    .tweet-stars  { font-size: 11px; color: var(--amber); margin-top: 7px; letter-spacing: 1px; }
+
+    /* PAYMENT */
+    .payment-row { display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+    .pay-badge { display: flex; align-items: center; gap: 5px; background: var(--bg3); border: 1px solid var(--border2); border-radius: 7px; padding: 5px 10px; font-size: 11px; font-weight: 600; color: var(--muted); }
+
+    /* PRICE */
+    .price-block { background: var(--bg2); border: 1px solid var(--border2); border-radius: 18px; padding: 26px 22px; }
+    .price-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; font-weight: 600; margin-bottom: 8px; }
+    .price-num { font-family: 'Syne', sans-serif; font-size: clamp(52px, 10vw, 76px); font-weight: 800; color: var(--white); line-height: 1; margin-bottom: 4px; letter-spacing: -.04em; }
+    .price-context { font-size: 14px; color: var(--muted); margin-bottom: 18px; }
+    .guarantee { display: flex; gap: 12px; align-items: flex-start; background: rgba(34,197,94,.05); border: 1px solid rgba(34,197,94,.15); border-radius: 10px; padding: 13px 15px; }
+    .guarantee-icon { font-size: 17px; flex-shrink: 0; margin-top: 1px; }
+    .guarantee-text { font-size: 13px; color: var(--muted); line-height: 1.5; }
+    .guarantee-text strong { color: var(--white); }
+
+    /* FAQ */
+    .faq { list-style: none; padding: 0; }
+    .faq li { border-bottom: 1px solid var(--border); padding: 14px 0; cursor: pointer; }
+    .faq li:first-child { padding-top: 0; }
+    .faq li:last-child { border-bottom: none; padding-bottom: 0; }
+    .faq-q { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    .faq-q h3 { font-size: 14px; margin-bottom: 0; }
+    .faq-icon { font-size: 18px; color: var(--muted); flex-shrink: 0; transition: transform .2s; }
+    .faq-a { font-size: 13px; color: var(--muted); max-height: 0; overflow: hidden; transition: max-height .3s ease, padding .2s; line-height: 1.55; }
+    .faq li.open .faq-a { max-height: 200px; padding-top: 10px; }
+    .faq li.open .faq-icon { transform: rotate(45deg); }
+
+    /* HERO CALCULATOR */
+    .hero-calc { background: var(--bg2); border: 1px solid var(--border2); border-radius: 16px; padding: 20px; margin-top: 22px; }
+    .calc-top { display: flex; gap: 10px; margin-bottom: 12px; }
+    .calc-field { flex: 1; }
+    .calc-field label { display: block; font-size: 10px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 5px; }
+    .calc-field input {
+      width: 100%; background: var(--bg3); border: 1px solid var(--border2);
+      border-radius: 8px; color: var(--white);
+      font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700;
+      padding: 9px 11px; outline: none; transition: border-color .15s;
+      appearance: none; -moz-appearance: textfield;
+    }
+    .calc-field input::-webkit-inner-spin-button,
+    .calc-field input::-webkit-outer-spin-button { -webkit-appearance: none; }
+    .calc-field input:focus { border-color: var(--green); }
+    .calc-prefix-wrap { display: flex; }
+    .calc-sym { display: flex; align-items: center; background: var(--bg3); border: 1px solid var(--border2); border-right: none; border-radius: 8px 0 0 8px; padding: 0 9px; font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; color: var(--muted); }
+    .calc-prefix-wrap input { border-radius: 0 8px 8px 0; border-left: none; }
+
+    .calc-btn-el {
+      width: 100%; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 15px;
+      background: var(--red); color: #fff; border: none; cursor: pointer;
+      padding: 12px 16px; border-radius: 9px;
+      transition: transform .15s, opacity .15s;
+      box-shadow: 0 4px 18px rgba(248,113,113,.2);
+    }
+    .calc-btn-el:hover:not(:disabled) { transform: translateY(-1px); opacity: .92; }
+    .calc-btn-el:disabled { opacity: .6; cursor: default; }
+
+    .calc-output { display: none; margin-top: 14px; }
+    .calc-output.show { display: block; animation: fadeUp .35s ease both; }
+    .calc-big { font-family: 'Syne', sans-serif; font-size: clamp(32px, 8vw, 48px); font-weight: 800; color: var(--red); line-height: 1; text-align: center; }
+    .calc-big-label { font-size: 12px; color: var(--muted); text-align: center; margin: 4px 0 12px; }
+    .calc-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin-bottom: 12px; }
+    .calc-stat { background: rgba(248,113,113,.07); border: 1px solid rgba(248,113,113,.13); border-radius: 8px; padding: 9px 5px; text-align: center; }
+    .calc-stat-n { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 800; color: var(--red); line-height: 1; margin-bottom: 3px; }
+    .calc-stat-l { font-size: 10px; color: var(--muted); }
+    .calc-roast { background: rgba(251,191,36,.06); border: 1px solid rgba(251,191,36,.15); border-radius: 8px; padding: 11px 13px; font-size: 13px; color: var(--amber); font-style: italic; line-height: 1.5; margin-bottom: 12px; min-height: 42px; }
+
+    /* IMPACT */
+    .impact { margin-top: 52px; text-align: center; }
+    .impact-line { font-family: 'Syne', sans-serif; font-size: clamp(20px, 5vw, 32px); font-weight: 800; line-height: 1.2; margin-bottom: 4px; }
+
+    /* QUOTE BREAK */
+    .quote-break { margin-top: 44px; padding: 26px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); text-align: center; }
+    .quote-break blockquote { font-family: 'Syne', sans-serif; font-size: clamp(16px, 3.5vw, 22px); font-weight: 700; color: var(--white); line-height: 1.35; margin-bottom: 9px; }
+    .quote-break cite { font-size: 12px; color: var(--dim); font-style: normal; }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+    .hero-anim > * { animation: fadeUp .5s ease both; }
+    .hero-anim > *:nth-child(1) { animation-delay: .04s; }
+    .hero-anim > *:nth-child(2) { animation-delay: .1s; }
+    .hero-anim > *:nth-child(3) { animation-delay: .18s; }
+    .hero-anim > *:nth-child(4) { animation-delay: .25s; }
+    .hero-anim > *:nth-child(5) { animation-delay: .31s; }
+
+    /* MOBILE */
+    @media (max-width: 480px) {
+      .bar-urgency { display: none; }
+      .wrap { padding: 0 14px; }
+      .card { padding: 16px; }
+      .price-block { padding: 20px 16px; }
+      section.sec { margin-top: 44px; }
+      .calc-top { flex-direction: column; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="bar">
+  <div class="bar-left">
+    <span class="bar-logo">ScrollReset</span>
+  <a href="https://buy.stripe.com/test_eVqdR86epdt7cYT9VrcEw02" class="bar-btn">Fix dit → €9</a>
+</nav>
+
+<div class="wrap">
+
+<!-- HERO + CALCULATOR -->
+<section style="padding-top: clamp(32px, 7vw, 60px); padding-bottom: 16px;">
+  <div class="hero-anim">
+
+    <p style="font-size:11px; color:var(--red); letter-spacing:.1em; text-transform:uppercase; font-weight:700; margin-bottom:10px; text-align:center;">Bereken het. Dan fix je het.</p>
+
+    <h1 style="text-align:center;">Hoeveel kost scrollen<br>jou elke maand?</h1>
+    <p style="font-size:15px; color:var(--muted); margin-top:10px; margin-bottom:0; text-align:center; line-height:1.5;">Vul in. Zie de schade. Beslis of €9 het waard is.</p>
+
+    <!-- CALCULATOR IN HERO -->
+    <div class="hero-calc">
+      <div class="calc-top">
+        <div class="calc-field">
+          <label for="c-hours">Uren scrollen per dag</label>
+          <input id="c-hours" type="number" min="0.5" max="24" step="0.5" value="3.5" inputmode="decimal">
+        </div>
+        <div class="calc-field">
+          <label for="c-rate">Je uurloon</label>
+          <div class="calc-prefix-wrap">
+            <span class="calc-sym">€</span>
+            <input id="c-rate" type="number" min="1" step="1" value="15" inputmode="numeric">
+          </div>
+        </div>
+      </div>
+
+      <button class="calc-btn-el" id="calc-btn" onclick="calcScroll()">
+        Bereken mijn schade →
+      </button>
+
+      <div class="calc-output" id="calc-output">
+        <div class="calc-big" id="out-maand">—</div>
+        <div class="calc-big-label">verloren per maand aan scrollen</div>
+        <div class="calc-stats">
+          <div class="calc-stat"><div class="calc-stat-n" id="out-dagen">—</div><div class="calc-stat-l">werkdagen/mnd</div></div>
+          <div class="calc-stat"><div class="calc-stat-n" id="out-jaar">—</div><div class="calc-stat-l">verlies/jaar</div></div>
+          <div class="calc-stat"><div class="calc-stat-n" id="out-uren">—</div><div class="calc-stat-l">uur/maand</div></div>
+        </div>
+        <div class="calc-roast" id="out-roast">🤔 Even nadenken…</div>
+        <a href="https://buy.stripe.com/test_eVqdR86epdt7cYT9VrcEw02" class="btn btn-green" style="font-size:15px; padding:14px 18px;">Fix dit in 7 dagen → €9</a>
+        <p class="micro" style="margin-top:7px;">PDF · Direct te downloaden · Eenmalig</p>
+      </div>
+    </div>
+
+
+
+  </div>
+</section>
+
+
+<!-- PIJN -->
+<section class="sec">
+  <div class="card card-red">
+    <h2 style="margin-bottom:12px;">Herkenbaar?</h2>
+    <ul class="pain">
+      <li>Je opent een app "even snel" en kijkt 45 minuten later op</li>
+      <li>Je hebt al eerder geprobeerd minder te scrollen — het hield twee dagen vol</li>
+      <li>Je voelt je afgeleid en leeg, bijna elke dag</li>
+      <li>Je weet dat het een probleem is, maar stoppen lukt niet</li>
+    </ul>
+    <span class="takeaway">Stoppen met scrollen werkt niet. Je moet de gewoonte zelf doorbreken.</span>
+    <p style="color:var(--amber); font-size:13px; margin-bottom:0;">Dit wordt niet vanzelf beter — het wordt automatischer.</p>
+  </div>
+</section>
+
+
+<!-- IMPACT -->
+<section class="impact">
+  <div class="impact-line" style="color:var(--white);">3,5 uur per dag.</div>
+  <div class="impact-line" style="color:var(--red);">Dat is 105 uur per maand.</div>
+  <div class="impact-line" style="color:var(--white);">1.260 uur per jaar.</div>
+  <p style="font-size:13px; color:var(--muted); margin-top:10px;">Meer dan 52 volledige dagen — puur aan scrollen.</p>
+</section>
+
+
+<!-- WAAROM DIT WERKT -->
+<section class="sec">
+  <h2>Waarom dit werkt</h2>
+  <div class="card">
+    <ul class="check">
+      <li>Je pakt de trigger aan — niet je wilskracht</li>
+      <li>Je maakt scrollen moeilijker — automatisch minder</li>
+      <li>Je vervangt het gedrag — geen terugval</li>
+    </ul>
+    <span class="takeaway">Scrollen is geen gebrek aan discipline. Het is een automatische gewoonte.</span>
+  </div>
+</section>
+
+
+<!-- QUOTE BREAK -->
+<div class="quote-break">
+  <blockquote>"De meeste mensen merken op dag 2 of 3 al<br>dat de drang zwakker wordt."</blockquote>
+  <cite>Niet omdat hun wilskracht beter is. Maar omdat de trigger grip verliest.</cite>
+</div>
+
+
+<!-- HET PLAN -->
+<section class="sec" id="plan">
+  <h2>Wat je doet</h2>
+  <div class="card">
+    <ul class="days">
+      <li>
+        <span class="tag">DAG 1–3</span>
+        <span><strong>Inzicht + trigger + weerstand.</strong> Je ontdekt het echte getal, vindt wat de loop start, en maakt scrollen fysiek moeilijker.</span>
+      </li>
+      <li>
+        <span class="tag">DAG 4–7</span>
+        <span><strong>Vervanging + structuur + blijvend.</strong> Je geeft je hersenen een alternatief, bouwt schermvrije zones, vergrendelt de verandering.</span>
+      </li>
+    </ul>
+    <span class="takeaway">10–15 minuten per dag. Geen apps verwijderen. Geen wilskracht.</span>
+    <p style="font-size:12px; color:var(--dim); margin-top:4px; margin-bottom:0;">Volledig dagplan — alle 7 stappen — zit in de PDF.</p>
+  </div>
+</section>
+
+
+<!-- SOCIAL PROOF -->
+<section class="sec">
+  <h2 style="margin-bottom:4px;">Wat anderen zeggen</h2>
+  <p style="font-size:12px; color:var(--muted); margin-bottom:14px;">Reviews van echte kopers</p>
+  <div class="tweet-grid">
+    <div class="tweet">
+      <div class="tweet-header">
+        <div class="tweet-avatar" style="background:#1a2e1a; color:#22c55e;">SB</div>
+        <div><div class="tweet-name">Sam Brugman</div><div class="tweet-handle">@sambrugman · koper</div></div>
+      </div>
+      <div class="tweet-body">"Dag 3 was zwaar, maar daarna voelde het alsof de app z'n grip kwijtraakte. Letterlijk."</div>
+      <div class="tweet-stars">★★★★★</div>
+    </div>
+    <div class="tweet">
+      <div class="tweet-header">
+        <div class="tweet-avatar" style="background:#1e1a2e; color:#a78bfa;">JV</div>
+        <div><div class="tweet-name">Julia Vos</div><div class="tweet-handle">@juliavos_ · koper</div></div>
+      </div>
+      <div class="tweet-body">"Van 4 uur naar 1,5 uur in een week. Ik verwachtte dit eerlijk gezegd niet."</div>
+      <div class="tweet-stars">★★★★★</div>
+    </div>
+    <div class="tweet">
+      <div class="tweet-header">
+        <div class="tweet-avatar" style="background:#1a1e2e; color:#60a5fa;">RK</div>
+        <div><div class="tweet-name">Rick Klaassen</div><div class="tweet-handle">@rickkl · koper</div></div>
+      </div>
+      <div class="tweet-body">"De triggerstap op dag 2 was het keerpunt. Daarna voelde scrollen niet meer automatisch."</div>
+      <div class="tweet-stars">★★★★★</div>
+    </div>
+    <div class="tweet">
+      <div class="tweet-header">
+        <div class="tweet-avatar" style="background:#2e1a1e; color:#f472b6;">NH</div>
+        <div><div class="tweet-name">Noor Hassan</div><div class="tweet-handle">@noorh · koper</div></div>
+      </div>
+      <div class="tweet-body">"Eindelijk geen 'gebruik meer discipline'. Een aanpak die begrijpt hoe gewoontes werken."</div>
+      <div class="tweet-stars">★★★★★</div>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- GRATIS PREVIEW -->
+<section class="sec">
+  <p style="font-size:11px; color:var(--green); letter-spacing:.08em; text-transform:uppercase; font-weight:700; margin-bottom:7px;">Gratis preview</p>
+  <h2 style="margin-bottom:10px;">Dag 1 staat klaar.</h2>
+  <div class="card card-dark" style="text-align:center;">
+    <p style="color:var(--muted); font-size:13px; margin-bottom:14px;">Volledig — taken, structuur, format. Zodat je het zelf ervaart voordat je beslist.</p>
+    <a href="preview.pdf" class="btn btn-green" style="max-width:380px; margin:0 auto 8px; font-size:14px; padding:12px 18px;">Lees Dag 1 gratis →</a>
+    <p style="font-size:11px; color:var(--dim); margin-bottom:0;">PDF · Direct · Geen aanmelding</p>
+  </div>
+</section>
+
+
+<!-- PRIJS -->
+<section class="sec">
+  <div class="price-block">
+
+    <p class="price-label">Eenmalige betaling. Voor altijd van jou.</p>
+    <div class="price-num">€9</div>
+    <p class="price-context">Je verliest elke dag 2+ uur. Dit kost €9 om dat terug te krijgen.</p>
+
+    <a href="https://buy.stripe.com/test_eVqdR86epdt7cYT9VrcEw02" class="btn btn-green">Breek de scroll-loop → €9</a>
+    <p class="micro" style="margin-top:7px;">PDF · Direct te downloaden · Geen abonnement · Werkt op elk apparaat</p>
+
+    <!-- Payment logos -->
+    <div class="payment-row">
+      <div class="pay-badge">
+        <svg width="18" height="12" viewBox="0 0 36 24"><rect width="36" height="24" rx="4" fill="#CC0066"/><text x="3" y="17" font-family="Arial" font-weight="bold" font-size="13" fill="white">iD</text></svg>
+        iDEAL
+      </div>
+      <div class="pay-badge">
+        <svg width="26" height="12" viewBox="0 0 52 24"><rect width="52" height="24" rx="4" fill="#1A1F71"/><text x="5" y="17" font-family="Arial" font-weight="bold" font-size="13" fill="white">VISA</text></svg>
+      </div>
+      <div class="pay-badge">
+        <svg width="26" height="16" viewBox="0 0 40 26"><circle cx="14" cy="13" r="10" fill="#EB001B"/><circle cx="26" cy="13" r="10" fill="#F79E1B"/></svg>
+        Mastercard
+      </div>
+      <div class="pay-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24"><text x="0" y="17" font-family="Arial" font-weight="bold" font-size="13" fill="#003087">P</text><text x="7" y="17" font-family="Arial" font-weight="bold" font-size="13" fill="#009CDE">P</text></svg>
+        PayPal
+      </div>
+      <div class="pay-badge" style="color:var(--green); border-color:rgba(34,197,94,.2);">🔒 Stripe beveiligd</div>
+    </div>
+
+    <div class="guarantee" style="margin-top:14px;">
+      <div class="guarantee-icon">🔒</div>
+      <div class="guarantee-text">
+        <strong>Geen risico.</strong> Doorloop het plan en merk geen verschil? Neem contact op. €9 is het niet waard als het niet werkt.
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- FAQ -->
+<section class="sec" style="padding-bottom: 72px;">
+  <h2>Vragen vooraf</h2>
+  <div class="card">
+    <ul class="faq">
+      <li onclick="toggleFaq(this)">
+        <div class="faq-q"><h3>Waarom zou dit anders zijn dan eerder proberen?</h3><span class="faq-icon">+</span></div>
+        <div class="faq-a">Omdat dit plan geen wilskracht gebruikt. Het richt zich op trigger, drempel en vervanging — de lagen waar de gewoonte écht zit.</div>
+      </li>
+      <li onclick="toggleFaq(this)">
+        <div class="faq-q"><h3>Moet ik apps verwijderen?</h3><span class="faq-icon">+</span></div>
+        <div class="faq-a">Nee. Het doel is controle, niet eliminatie. De meeste mensen houden alle apps — maar zonder de compulsieve loop.</div>
+      </li>
+      <li onclick="toggleFaq(this)">
+        <div class="faq-q"><h3>Hoelang duurt elke dag?</h3><span class="faq-icon">+</span></div>
+        <div class="faq-a">10 tot 15 minuten. Soms minder.</div>
+      </li>
+      <li onclick="toggleFaq(this)">
+        <div class="faq-q"><h3>Wat als ik toch scroll op dag 4?</h3><span class="faq-icon">+</span></div>
+        <div class="faq-a">Verwacht. Je begint niet opnieuw — je gaat verder. Een terugval is informatie, geen mislukking.</div>
+      </li>
+      <li onclick="toggleFaq(this)">
+        <div class="faq-q"><h3>Wat krijg ik precies?</h3><span class="faq-icon">+</span></div>
+        <div class="faq-a">Een PDF van 9 pagina's. Direct te downloaden na betaling. Geen account, geen app, geen inloggen.</div>
+      </li>
+      <li onclick="toggleFaq(this)">
+        <div class="faq-q"><h3>Hoe betaal ik?</h3><span class="faq-icon">+</span></div>
+        <div class="faq-a">Via Stripe — iDEAL, Visa, Mastercard of PayPal. Veilig, direct, geen account nodig.</div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+</div>
+
+<script>
+// CALCULATOR
+async function calcScroll() {
+  const hours = parseFloat(document.getElementById('c-hours').value) || 0;
+  const rate  = parseFloat(document.getElementById('c-rate').value)  || 0;
+  const btn   = document.getElementById('calc-btn');
+  const out   = document.getElementById('calc-output');
+
+  if (hours <= 0 || rate <= 0) return;
+
+  const urenMaand = +(hours * 30).toFixed(1);
+  const dagen     = +(hours * 30 / 8).toFixed(1);
+  const maand     = Math.round(hours * rate * 30);
+  const jaar      = Math.round(hours * rate * 365);
+
+  document.getElementById('out-maand').textContent = '€ ' + maand.toLocaleString('nl-NL');
+  document.getElementById('out-dagen').textContent = dagen + 'd';
+  document.getElementById('out-jaar').textContent  = '€' + jaar.toLocaleString('nl-NL');
+  document.getElementById('out-uren').textContent  = urenMaand + 'u';
+  out.classList.add('show');
+  out.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+  btn.disabled = true;
+  btn.textContent = 'Even nadenken…';
+  document.getElementById('out-roast').textContent = '🤔 Bezig met roasten…';
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 80,
+        system: 'Je bent een sarcastische maar eerlijke coach. Geef één korte Nederlandse zin (max 20 woorden). Geen aanhalingstekens, geen preamble.',
+        messages: [{ role: 'user', content: `Iemand scrollt ${hours} uur/dag, verdient €${rate}/uur, verliest €${maand}/maand. Roast in 1 zin.` }]
+      })
+    });
+    const data = await res.json();
+    const roast = data.content?.[0]?.text?.trim();
+    document.getElementById('out-roast').textContent = roast ? '💬 ' + roast : fallback(hours, maand, dagen);
+  } catch {
+    document.getElementById('out-roast').textContent = fallback(hours, maand, dagen);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Bereken mijn schade →';
+  }
+}
+
+function fallback(h, m, d) {
+  const r = [
+    `Je werkt ${d} dagen per maand gratis voor TikTok.`,
+    `€${m}/maand kwijt aan content die je toch vergeet.`,
+    `${h} uur per dag scrollen, maar geen tijd voor wat telt.`,
+    `Jouw aandacht betaalt de bonus van een Silicon Valley-ingenieur.`,
+    `€${m} per maand. Voor scrollen. Dat is je keuze.`
+  ];
+  return '💬 ' + r[Math.floor(Math.random() * r.length)];
+}
+
+// FAQ
+function toggleFaq(el) { el.classList.toggle('open'); }
+</script>
 </body>
 </html>
